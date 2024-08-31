@@ -96,13 +96,13 @@ public class HorarioFuncionamentoService {
         }
 
         LocalTime horarioAbertura = horario.getInicio();
-
         List<LocalTime> intervalos = new ArrayList<>();
-        int periodoAberto = (int) java.time.Duration.between(horario.getInicio(), horario.getFim()).toHours();
+        LocalTime ultimoHorario = horario.getInicio();
 
-        for (int i = 0; i < periodoAberto; i++) {
+        while (ultimoHorario.isBefore(horario.getFim())) {
             intervalos.add(horarioAbertura);
             horarioAbertura = horarioAbertura.plusMinutes(empresa.getIntervaloAtendimento());
+            ultimoHorario = ultimoHorario.plusMinutes(empresa.getIntervaloAtendimento());
         }
 
         return intervalos;
