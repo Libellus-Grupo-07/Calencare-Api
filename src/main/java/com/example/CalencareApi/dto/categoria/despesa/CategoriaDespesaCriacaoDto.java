@@ -7,10 +7,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class CategoriaDespesaCriacaoDto {
-
     @NotBlank
     private String nome;
-
-    private String descricao;
-
 }

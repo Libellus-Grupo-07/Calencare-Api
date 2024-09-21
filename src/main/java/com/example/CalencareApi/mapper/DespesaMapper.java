@@ -11,8 +11,11 @@ public class DespesaMapper {
     public static Despesa toEntity(DespesaCriacaoDto despesaDto) {
         Despesa despesaEntity = new Despesa();
         despesaEntity.setNome(despesaDto.getNome());
-        despesaEntity.setDescricao(despesaDto.getDescricao());
+        despesaEntity.setObservacao(despesaDto.getObservacao());
         despesaEntity.setValor(despesaDto.getValor());
+        despesaEntity.setFormaPagamento(despesaDto.getFormaPagamento());
+        despesaEntity.setDtCriacao(despesaDto.getDtCriacao());
+        despesaEntity.setBitStatus(1);
         return despesaEntity;
     }
 
@@ -20,8 +23,9 @@ public class DespesaMapper {
         DespesaConsultaDto despesaDto = new DespesaConsultaDto();
         despesaDto.setId(despesaEntity.getId());
         despesaDto.setNome(despesaEntity.getNome());
-        despesaDto.setDescricao(despesaEntity.getDescricao());
+        despesaDto.setObservacao(despesaEntity.getObservacao());
         despesaDto.setValor(despesaEntity.getValor());
+        despesaDto.setFormaPagamento(despesaEntity.getFormaPagamento());
         despesaDto.setDtCriacao(despesaEntity.getDtCriacao());
         despesaDto.setEmpresa(despesaEntity.getEmpresa());
         despesaDto.setCategoriaDespesa(despesaEntity.getCategoriaDespesa());

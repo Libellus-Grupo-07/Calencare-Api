@@ -11,11 +11,8 @@ import lombok.Setter;
 @Getter
 @Entity
 public class CategoriaDespesa {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
-    private String descricao;
-
 }

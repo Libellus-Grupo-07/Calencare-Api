@@ -46,6 +46,11 @@ public class CategoriaDespesaService {
         return dto;
     }
 
+    public CategoriaDespesa buscarEntidadePorId(Integer id) {
+        return this.categoriaDespesaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+    }
+
     public Boolean existeNome(String nome){ return this.categoriaDespesaRepository.existsCategoriaDespesaByNome(nome);}
 
     public Boolean existePorId(Integer id) {
