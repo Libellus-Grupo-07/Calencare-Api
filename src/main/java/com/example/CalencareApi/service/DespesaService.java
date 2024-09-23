@@ -111,9 +111,23 @@ public class DespesaService {
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Despesa não encontrada"));
     }
 
-    public void deletarPorId(Integer id) {
+    public DespesaConsultaDto retornarPorIdPorEmpresa (Integer id, Integer empresaId) {
         Despesa despesa = this.despesaRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Despesa não encontrada"));
+        Empresa empresa = empresaService.buscarEntidadePorId(empresaId);
+        if (!despesa.getEmpresa().equals(empresa)) {
+            return null;
+        }
+        return DespesaMapper.toDto(despesa);
+    }
+
+    public void deletarPorId(Integer id, Integer empresaId) {
+        Despesa despesa = this.despesaRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Despesa não encontrada"));
+        Empresa empresa = empresaService.buscarEntidadePorId(empresaId);
+        if (!despesa.getEmpresa().equals(empresa)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Despesa não pertence a empresa");
+        }
         despesa.setBitStatus(4);
         this.despesaRepository.save(despesa);
     }
