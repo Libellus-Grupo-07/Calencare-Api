@@ -23,7 +23,7 @@ public class CalencareApiApplication {
 		SpringApplication.run(CalencareApiApplication.class, args);
 	}
 
-	/*@Bean
+	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
@@ -33,6 +33,6 @@ public class CalencareApiApplication {
 						.allowedMethods("GET", "POST", "PUT", "DELETE");
 			}
 		};
-	}*/
+	}
 
 }
