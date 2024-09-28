@@ -3,8 +3,9 @@
 #   public_key = file("${path.module}/tf_key.pem.pub")
 # }
 
+# Criação da instância e da AMI
 resource "aws_instance" "public_ec2_backend-1" {
-  ami               = var.ami
+  ami               = var.ami  # Inicialmente deixado em branco
   availability_zone = var.az
   instance_type     = var.inst_type
   ebs_block_device {
@@ -32,7 +33,7 @@ resource "aws_instance" "public_ec2_backend-1" {
 
     # Instalar Docker
     sudo apt-get install -y docker.io
-    #instalar docker-compose
+    # Instalar docker-compose
     sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
@@ -48,8 +49,17 @@ resource "aws_instance" "public_ec2_backend-1" {
   )
 }
 
+# Criação da AMI a partir da instância
+resource "aws_ami_from_instance" "my_ami" {
+  name               = "my-custom-ami-${aws_instance.public_ec2_backend-1.id}"
+  source_instance_id = aws_instance.public_ec2_backend-1.id
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_instance" "public_ec2_backend-2" {
-  ami               = var.ami
+  ami               = aws_ami_from_instance.my_ami.id  # Usando a AMI criada
   availability_zone = var.az
   instance_type     = var.inst_type
   ebs_block_device {
@@ -78,7 +88,7 @@ resource "aws_instance" "public_ec2_backend-2" {
     # Instalar Docker
     sudo apt-get install -y docker.io
 
-    #instalar docker-compose
+    # Instalar docker-compose
     sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
