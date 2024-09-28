@@ -13,6 +13,8 @@ variable "key_pair_name" {
 variable "ami" {
   description = "AMI ID"
   type        = string
+  default     = "ami-0e86e20dae9224db8"  # O ID da AMI
+
 }
 
 
