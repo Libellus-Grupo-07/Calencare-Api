@@ -42,7 +42,7 @@ resource "aws_instance" "public_ec2_backend-1" {
     sudo systemctl enable docker
 
     # Executar comandos Docker
-    sudo docker pull $DOCKERHUB_USERNAME/nhyira-api
+    sudo docker pull $DOCKERHUB_USERNAME/calencare-api
     sudo docker-compose -f /home/ubuntu/AWS/docker-compose.yml up -d
     EOF
   )
@@ -88,7 +88,7 @@ resource "aws_instance" "public_ec2_backend-2" {
     sudo systemctl enable docker
 
     # Executar comandos Docker
-    sudo docker pull $DOCKERHUB_USERNAME/nhyira-api
+    sudo docker pull $DOCKERHUB_USERNAME/calencare-api
     sudo docker-compose -f /home/ubuntu/AWS/docker-compose.yml up -d
     EOF
   )

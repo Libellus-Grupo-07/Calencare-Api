@@ -51,7 +51,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/foodway-api:latest .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/calencare-api:latest .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/foodway-api:latest
 
   deploy-to-aws:

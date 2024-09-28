@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  nhyira-backend:
+  calencare-backend:
     build: .
     ports:
       - "5225:8080"
@@ -31,7 +31,7 @@ services:
       SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE: 200MB
       SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE: 200MB
     networks:
-      - nhyira
+      - calencare
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -44,8 +44,8 @@ services:
     volumes:
       - ./data:/var/opt/mssql
     networks:
-      - nhyira
+      - calencare
 
 networks:
-  nhyira:
+  calencare:
     driver: bridge
