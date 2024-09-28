@@ -7,7 +7,7 @@ variable "az" {
 variable "key_pair_name" {
   description = "Key Pair Name"
   type        = string
-  default     = "tf_key"
+  default     = "key-0764579acf410ff3a"
 }
 
 variable "ami" {
@@ -27,7 +27,7 @@ variable "inst_type" {
 variable "subnet_id" {
   description = "Subnet ID"
   type        = string
-  default     = "subnet-03538fa6c1081c33b"
+  default     = "subnet-0b841b4239b76600e"
 }
 
 variable "sg_id" {
