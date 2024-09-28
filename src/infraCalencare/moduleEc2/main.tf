@@ -57,7 +57,7 @@ resource "aws_instance" "public_ec2_backend-2" {
     volume_size = 16
     volume_type = "gp3"
   }
-  key_name                    = "shh_key"
+  key_name                    = "ola"
   subnet_id                   = var.subnet_id
   associate_public_ip_address = false
   vpc_security_group_ids      = [var.sg_id]
