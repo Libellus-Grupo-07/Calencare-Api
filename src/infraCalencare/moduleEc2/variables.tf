@@ -1,19 +1,19 @@
 variable "az" {
   description = "Availability Zone"
   type        = string
-  default     = "us-east-1a"
+  default     = "us-east-1"
 }
 
 variable "key_pair_name" {
-  description = "Key Pair Name"
+  description = "teste"
   type        = string
-  default     = "key-0764579acf410ff3a"
+  default     = "key-0f0600fb44a24f436"
 }
 
 variable "ami" {
   description = "AMI ID"
   type        = string
-  default     = "ami-0e86e20dae9224db8"  # O ID da AMI
+  default     = "ami-0ebfd941bbafe70c6"  # O ID da AMI
 
 }
 
@@ -27,7 +27,7 @@ variable "inst_type" {
 variable "subnet_id" {
   description = "Subnet ID"
   type        = string
-  default     = "subnet-0b841b4239b76600e"
+  default     = "subnet-05cb7255de055cffc"
 }
 
 variable "sg_id" {
