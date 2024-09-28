@@ -17,7 +17,6 @@ variable "ami" {
 
 }
 
-
 variable "inst_type" {
   description = "Instance Type"
   type        = string
