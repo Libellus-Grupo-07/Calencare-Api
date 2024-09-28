@@ -33,7 +33,7 @@ variable "subnet_id" {
 variable "sg_id" {
   description = "Security Group ID"
   type        = string
-  default     = "sg-041d7ba94beddfa4e"
+  default     = "sg-0a18685ca51d68ffd"
 }
 
 variable "dockerhub_username" {
