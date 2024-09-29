@@ -7,9 +7,9 @@ services:
       - "5225:8080"
     environment:
       SPRING_APPLICATION_NAME: Calencare-Api
-      SPRING_DATASOURCE_URL: jdbc:sqlserver://calencare.database.windows.net:1433;database=calencare;user=calencare-grupo7;password=Libellus@5271;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-      SPRING_DATASOURCE_USERNAME: calencare-grupo7
-      SPRING_DATASOURCE_PASSWORD: Libellus@5271
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://calencare.database.windows.net:1433;database=calencare;user=admin;password=Libellus5271;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: Libellus5271
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
       SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION: true
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.SQLServerDialect
@@ -37,7 +37,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: Y
-      SA_PASSWORD: Libellus@5271  # Senha do SQL Server
+      SA_PASSWORD: Libellus5271  # Senha do SQL Server
       MSSQL_PID: Developer
     ports:
       - "1433:1433"
