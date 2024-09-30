@@ -110,7 +110,7 @@ resource "aws_instance" "public_ec2_backend-2" {
   )
 }
 
-/*resource "aws_eip_association" "eip_assoc_01" {
+resource "aws_eip_association" "eip_assoc_01" {
   instance_id   = aws_instance.public_ec2_backend-1.id
-  allocation_id  = "eipalloc-04c103f2c5910a4cb" # ID de alocação do EIP
-}*/
+  //allocation_id  = "eipalloc-04c103f2c5910a4cb" # ID de alocação do EIP
+}
