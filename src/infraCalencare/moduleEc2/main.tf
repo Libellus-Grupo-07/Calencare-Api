@@ -9,7 +9,7 @@ resource "aws_instance" "public_ec2_backend-1" {
   }
   key_name                    = "teste"
   subnet_id                   = var.subnet_id
-  associate_public_ip_address = "false"
+  associate_public_ip_address = false
   vpc_security_group_ids      = [var.sg_id]
   tags = {
     Name = "private-ec2-01"
@@ -66,7 +66,7 @@ resource "aws_instance" "public_ec2_backend-2" {
   }
   key_name                    = "teste"
   subnet_id                   = var.subnet_id
-  associate_public_ip_address = ""
+  associate_public_ip_address = false
   vpc_security_group_ids      = [var.sg_id]
   tags = {
     Name = "private-ec2-02"
