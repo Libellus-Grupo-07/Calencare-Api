@@ -9,7 +9,7 @@ resource "aws_instance" "public_ec2_backend-1" {
   }
   key_name                    = "teste"
   subnet_id                   = var.subnet_id
-  associate_public_ip_address = false
+  associate_public_ip_address = "false"
   vpc_security_group_ids      = [var.sg_id]
   tags = {
     Name = "private-ec2-01"
@@ -66,7 +66,7 @@ resource "aws_instance" "public_ec2_backend-2" {
   }
   key_name                    = "teste"
   subnet_id                   = var.subnet_id
-  associate_public_ip_address = false
+  associate_public_ip_address = ""
   vpc_security_group_ids      = [var.sg_id]
   tags = {
     Name = "private-ec2-02"
@@ -112,5 +112,5 @@ resource "aws_instance" "public_ec2_backend-2" {
 
 resource "aws_eip_association" "eip_assoc_01" {
   instance_id   = aws_instance.public_ec2_backend-1.id
-  //allocation_id  = "eipalloc-04c103f2c5910a4cb" # ID de alocação do EIP
+  allocation_id  = "eipalloc-0f2aa5d16ab6481d7" # ID de alocação do EIP
 }
