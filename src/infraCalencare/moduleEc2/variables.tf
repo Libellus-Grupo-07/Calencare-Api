@@ -32,7 +32,7 @@ variable "subnet_id" {
 variable "sg_id" {
   description = "Security Group ID"
   type        = string
-  default     = "sgr-0c5be853b93241dff"
+  default     = "sg-01a495c5d1da3c727"
 }
 
 variable "dockerhub_username" {
@@ -41,7 +41,7 @@ variable "dockerhub_username" {
 }
 
 variable "snapshot_id" {
-  default = "snap-0d20b4350b63ed2ee"
+  default = "snap-03c1449533e16cc6b"
   description = "Snapshot ID Backend"
   type        = string
 }
