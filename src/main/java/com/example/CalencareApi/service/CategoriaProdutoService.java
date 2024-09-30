@@ -39,6 +39,10 @@ public class CategoriaProdutoService {
         return CategoriaProdutoMapper.toDto(this.repository.findAll());
     }
 
+    public CategoriaProduto buscarEntidadePorId(Integer id) {
+        return this.repository.findById(id).orElse(null);
+    }
+
     public Boolean existeNome(String nome) {
         return this.repository.existsCategoriaProdutoByNome(nome);
     }
