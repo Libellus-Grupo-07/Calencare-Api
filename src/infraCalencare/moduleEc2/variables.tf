@@ -5,17 +5,17 @@ variable "az" {
 }
 
 variable "key_pair_name" {
-  description = "teste"
+  description = "Key Pair Name"
   type        = string
-  default     = "key-0f0600fb44a24f436"
+  default     = "teste"
 }
 
 variable "ami" {
   description = "AMI ID"
   type        = string
-  default     = "ami-0ebfd941bbafe70c6"  # O ID da AMI
-
+  default     = "ami-005fc0f236362e99f"  # O ID da AMI
 }
+
 
 variable "inst_type" {
   description = "Instance Type"
@@ -26,13 +26,13 @@ variable "inst_type" {
 variable "subnet_id" {
   description = "Subnet ID"
   type        = string
-  default     = "subnet-05cb7255de055cffc"
+  default     = "subnet-024d426e8b3131b47"
 }
 
 variable "sg_id" {
   description = "Security Group ID"
   type        = string
-  default     = "sg-0a18685ca51d68ffd"
+  default     = "sgr-0c5be853b93241dff"
 }
 
 variable "dockerhub_username" {

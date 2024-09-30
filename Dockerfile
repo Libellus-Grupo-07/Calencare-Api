@@ -9,12 +9,12 @@ COPY pom.xml .
 COPY src ./src
 
 #Executa o Maven para compilar o projeto e criar o JAR
-RUN mvn clean package -DskipTests
+RUN mvn clean install
 
 #Cria a imagem final com o JAR
-FROM openjdk:17-jdk-slim
+FROM openjdk:17
 WORKDIR /target
-COPY --from=build /target/*.jar /target/Calecare-Api.jar
+COPY --from=build /target/*.jar /target/app.jar
 
 #Comando para rodar a aplicação
-ENTRYPOINT ["java", "-jar", "/target/Calecare-Api.jar"]
+ENTRYPOINT ["java", "-jar", "/target/app.jar"]

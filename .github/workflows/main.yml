@@ -2,7 +2,7 @@ name: CI/CD Backend - calencare
 
 on:
   push:
-    branches: [ main ]
+    branches: [ teste-aws-2 ]
 
 jobs:
   build-and-test:
