@@ -43,7 +43,7 @@ resource "aws_instance" "public_ec2_backend-1" {
     sudo systemctl enable docker
 
     # Executa comandos Docker
-    sudo docker pull $DOCKERHUB_USERNAME/nhyira-api
+    sudo docker pull $DOCKERHUB_USERNAME/calencare-api
 
     # Copia o docker-compose.yml para o diretório correto
     sudo cp /path/to/your/docker-compose.yml /home/ubuntu/AWS/docker-compose.yml
@@ -98,7 +98,7 @@ resource "aws_instance" "public_ec2_backend-2" {
     sudo systemctl enable docker
 
     # Executa comandos Docker
-    sudo docker pull $DOCKERHUB_USERNAME/nhyira-api
+    sudo docker pull $DOCKERHUB_USERNAME/calencare-api
 
     # Copia o docker-compose.yml para o diretório correto
     sudo cp /path/to/your/docker-compose.yml /home/ubuntu/AWS/docker-compose.yml
