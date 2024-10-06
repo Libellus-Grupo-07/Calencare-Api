@@ -17,40 +17,49 @@ resource "aws_instance" "public_ec2_backend-1" {
   user_data = base64encode(<<-EOF
     #!/bin/bash
 
-    # Cria a pasta aws
-    sudo mkdir -p /home/ubuntu/aws
+# Cria a pasta aws
+sudo mkdir -p /home/ubuntu/aws
+sleep 5
 
-    # Clonar ou atualizar o repositório
-    if [ ! -d "/home/ubuntu/aws/.git" ]; then
-      sudo git clone https://github.com/Libellus-Grupo-07/Calencare-Api.git /home/ubuntu/aws
-    else
-      cd /home/ubuntu/aws
-      sudo git pull origin main  # Atualiza o repositório
-    fi
+# Clonar ou atualizar o repositório
+if [ ! -d "/home/ubuntu/aws/.git" ]; then
+  sudo git clone https://github.com/Libellus-Grupo-07/Calencare-Api.git /home/ubuntu/aws
+else
+  cd /home/ubuntu/aws
+  sudo git pull origin main  # Atualiza o repositório
+fi
+sleep 5
 
-    # Atualiza pacotes e instala Java
-    sudo apt-get update -y
-    sudo apt-get install -y default-jdk
+# Atualiza pacotes e instala Java
+sudo apt-get update -y
+sleep 5
+sudo apt-get install -y default-jdk
+sleep 5
 
-    # Instala Docker
-    sudo apt-get install -y docker.io
+# Instala Docker
+sudo apt-get install -y docker.io
+sleep 5
 
-    # Instala Docker Compose
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
+# Instala Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sleep 5
 
-    # Inicia e habilita Docker
-    sudo systemctl start docker
-    sudo systemctl enable docker
+# Inicia e habilita Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sleep 5
 
-    # Navega até o diretório do projeto
-    cd /home/ubuntu/aws
+# Navega até o diretório do projeto
+cd /home/ubuntu/aws
 
-    # Constrói a imagem Docker usando o Dockerfile
-    sudo docker build -t calencare-api .
+# Constrói a imagem Docker usando o Dockerfile
+sudo docker build -t calencare-api .
+sleep 5
 
-    # Executa o Docker Compose para iniciar os serviços
-    sudo docker-compose up --build
+# Executa o Docker Compose para iniciar os serviços
+sudo docker-compose up --build
+
     EOF
   )
 }
@@ -74,40 +83,49 @@ resource "aws_instance" "public_ec2_backend-2" {
   user_data = base64encode(<<-EOF
     #!/bin/bash
 
-    # Cria a pasta aws
-    sudo mkdir -p /home/ubuntu/aws
+# Cria a pasta aws
+sudo mkdir -p /home/ubuntu/aws
+sleep 5
 
-    # Clonar ou atualizar o repositório
-    if [ ! -d "/home/ubuntu/aws/.git" ]; then
-      sudo git clone https://github.com/Libellus-Grupo-07/Calencare-Api.git /home/ubuntu/aws
-    else
-      cd /home/ubuntu/aws
-      sudo git pull origin main  # Atualiza o repositório
-    fi
+# Clonar ou atualizar o repositório
+if [ ! -d "/home/ubuntu/aws/.git" ]; then
+  sudo git clone https://github.com/Libellus-Grupo-07/Calencare-Api.git /home/ubuntu/aws
+else
+  cd /home/ubuntu/aws
+  sudo git pull origin main  # Atualiza o repositório
+fi
+sleep 5
 
-    # Atualiza pacotes e instala Java
-    sudo apt-get update -y
-    sudo apt-get install -y default-jdk
+# Atualiza pacotes e instala Java
+sudo apt-get update -y
+sleep 5
+sudo apt-get install -y default-jdk
+sleep 5
 
-    # Instala Docker
-    sudo apt-get install -y docker.io
+# Instala Docker
+sudo apt-get install -y docker.io
+sleep 5
 
-    # Instala Docker Compose
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
+# Instala Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sleep 5
 
-    # Inicia e habilita Docker
-    sudo systemctl start docker
-    sudo systemctl enable docker
+# Inicia e habilita Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sleep 5
 
-    # Navega até o diretório do projeto
-    cd /home/ubuntu/aws
+# Navega até o diretório do projeto
+cd /home/ubuntu/aws
 
-    # Constrói a imagem Docker usando o Dockerfile
-    sudo docker build -t calencare-api .
+# Constrói a imagem Docker usando o Dockerfile
+sudo docker build -t calencare-api .
+sleep 5
 
-    # Executa o Docker Compose para iniciar os serviços
-    sudo docker-compose up --build
+# Executa o Docker Compose para iniciar os serviços
+sudo docker-compose up --build
+
     EOF
   )
 }
