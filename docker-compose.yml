@@ -10,7 +10,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/calencare
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: Libellus5271
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION: true
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
       SPRING_JPA_SHOW_SQL: true
@@ -34,21 +34,21 @@ services:
       - calencare
 
   mysql:
-    image: mysql:latest  # Imagem do MySQL
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: Libellus5271  # Senha do MySQL
-      MYSQL_DATABASE: calencare  # Nome do banco de dados
+      MYSQL_ROOT_PASSWORD: Libellus5271
+      MYSQL_DATABASE: calencare
     ports:
-      - "3306:3306"  # Porta do MySQL
+      - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql  # Persistência dos dados do MySQL
-      - ./Data:/docker-entrypoint-initdb.d  # Script SQL de inicialização (opcional)
+      - mysql_data:/var/lib/mysql
+      - ./Data:/docker-entrypoint-initdb.d
     networks:
       - calencare
 
-  networks:
-    calencare:
-      driver: bridge
+networks:
+  calencare:
+    driver: bridge
 
-  volumes:
-    mysql_data:
+volumes:
+  mysql_data:

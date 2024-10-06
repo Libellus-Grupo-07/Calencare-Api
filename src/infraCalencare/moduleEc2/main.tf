@@ -23,7 +23,6 @@ resource "aws_instance" "public_ec2_backend-1" {
     # Clonar ou atualizar o repositório
     if [ ! -d "/home/ubuntu/aws/.git" ]; then
       sudo git clone https://github.com/Libellus-Grupo-07/Calencare-Api.git /home/ubuntu/aws
-      sudo git clone https://github.com/Libellus-Grupo-07/Calencare-Api.git /home/ubuntu/aws
     else
       cd /home/ubuntu/aws
       sudo git pull origin main  # Atualiza o repositório
@@ -48,7 +47,7 @@ resource "aws_instance" "public_ec2_backend-1" {
     cd /home/ubuntu/aws
 
     # Constrói a imagem Docker usando o Dockerfile
-    sudo docker build -t nhyira-api .
+    sudo docker build -t calencare-api .
 
     # Executa o Docker Compose para iniciar os serviços
     sudo docker-compose up --build
