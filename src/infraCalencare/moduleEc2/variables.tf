@@ -32,7 +32,7 @@ variable "subnet_id" {
 variable "sg_id" {
   description = "Security Group ID"
   type        = string
-  default     = "sg-01a495c5d1da3c727"
+  default     = ""
 }
 
 variable "dockerhub_username" {
@@ -44,4 +44,10 @@ variable "snapshot_id" {
   default = "snap-03c1449533e16cc6b"
   description = "Snapshot ID Backend"
   type        = string
+}
+
+variable "vpc_id" {
+  description = "VPC ID"
+  type        = string
+  default = "vpc-057b7e0a7870967cf"
 }
