@@ -6,8 +6,8 @@ pom.xml.backup
 target/site
 target/logs
 
-src/main/resources/application.properties
-src/main/resources/application.yml
+#src/main/resources/application.properties
+#src/main/resources/application.yml
 
 # Arquivos de IDE
 .idea/
