@@ -1,6 +1,15 @@
+# Data source para buscar instâncias existentes com a tag "Name"
+data "aws_instances" "existing_instances" {
+  filter {
+    name   = "tag:Name"
+    values = ["private-ec2-01", "private-ec2-02"]
+  }
+}
 
 # Definição das Instâncias EC2
 resource "aws_instance" "public_ec2_backend-1" {
+  count = length(data.aws_instances.existing_instances.ids) == 0 ? 1 : 0  # Cria apenas se não existir
+
   ami               = var.ami
   availability_zone = var.az
   instance_type     = var.inst_type
@@ -27,8 +36,8 @@ resource "aws_instance" "public_ec2_backend-1" {
       sudo git clone https://github.com/Libellus-Grupo-07/Calencare-Api.git /home/ubuntu/aws
       echo "Repositório clonado com sucesso"
     else
-      echo "Repositório já existe, atualizando..."
-      cd /home/ubuntu/aws && sudo git pull
+      cd /home/ubuntu/aws
+      sudo git pull origin main  # Atualiza o repositório
     fi
 
     # Atualiza pacotes e instala Java
@@ -61,6 +70,8 @@ resource "aws_instance" "public_ec2_backend-1" {
 }
 
 resource "aws_instance" "public_ec2_backend-2" {
+  count = length(data.aws_instances.existing_instances.ids) == 0 ? 1 : 0  # Cria apenas se não existir
+
   ami               = var.ami
   availability_zone = var.az
   instance_type     = var.inst_type
@@ -87,8 +98,8 @@ resource "aws_instance" "public_ec2_backend-2" {
       sudo git clone https://github.com/Libellus-Grupo-07/Calencare-Api.git /home/ubuntu/aws
       echo "Repositório clonado com sucesso"
     else
-      echo "Repositório já existe, atualizando..."
-      cd /home/ubuntu/aws && sudo git pull
+      cd /home/ubuntu/aws
+      sudo git pull origin main  # Atualiza o repositório
     fi
 
     # Atualiza pacotes e instala Java
