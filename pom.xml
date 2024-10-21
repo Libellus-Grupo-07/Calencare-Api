@@ -166,8 +166,14 @@
 	</dependency>
 
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
 
-	<dependency>
+
+        <dependency>
 		<groupId>com.google.api-client</groupId>
 		<artifactId>google-api-client</artifactId>
 		<version>1.31.2</version>
