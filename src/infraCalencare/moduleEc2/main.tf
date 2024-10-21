@@ -132,6 +132,7 @@ resource "aws_instance" "public_ec2_backend-2" {
 }
 
 resource "aws_eip_association" "eip_assoc_01" {
+  count         = length(aws_instance.public_ec2_backend-1) > 0 ? 1 : 0  # Verifica se a instância existe
   instance_id   = aws_instance.public_ec2_backend-1[0].id
   allocation_id  = "eipalloc-0f2aa5d16ab6481d7" # ID de alocação do EIP
 }
