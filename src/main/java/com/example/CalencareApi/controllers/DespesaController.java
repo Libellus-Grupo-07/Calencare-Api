@@ -2,110 +2,108 @@ package com.example.CalencareApi.controllers;
 
 import com.example.CalencareApi.dto.despesa.DespesaAtualizarDto;
 import com.example.CalencareApi.dto.despesa.DespesaConsultaDto;
-import com.example.CalencareApi.entity.CategoriaDespesa;
-import com.example.CalencareApi.entity.Despesa;
-import com.example.CalencareApi.entity.Empresa;
-import com.example.CalencareApi.mapper.DespesaMapper;
-import com.example.CalencareApi.repository.CategoriaDespesaRepository;
-import com.example.CalencareApi.repository.DespesaRepository;
-import com.example.CalencareApi.repository.EmpresaRepository;
+import com.example.CalencareApi.dto.despesa.DespesaCriacaoDto;
 import com.example.CalencareApi.service.DespesaService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.Year;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/despesas")
 public class DespesaController {
 
-    @Autowired
-    private EmpresaRepository empresaRepository;
-
-    @Autowired
-    private DespesaService despesaService;
-
-    @Autowired
-    private DespesaRepository despesaRepository;
-
-    @Autowired
-    private CategoriaDespesaRepository categoriaDespesaRepository;
-
-    @PostMapping("/{empresaId}/{categoriaId}")
-    public ResponseEntity<Despesa> cadastrarDespesa(
-            @Valid @RequestBody Despesa novaDespesa,
-            @PathVariable int empresaId,
-            @PathVariable int categoriaId) {
-        Optional<Empresa> empresa = empresaRepository.findById(empresaId);
-        Optional<CategoriaDespesa> categoriaDespesa = categoriaDespesaRepository.findById(categoriaId);
-        if(empresa.isEmpty() || categoriaDespesa.isEmpty()){
-            return ResponseEntity.status(404).build();
-        }
-        if(Objects.isNull(novaDespesa)){
-            return ResponseEntity.status(400).build();
-        }
-        //Despesa despesa = DespesaMapper.toEntity(novaDespesa);
-        novaDespesa.setEmpresa(empresa.get());
-        novaDespesa.setCategoriaDespesa(categoriaDespesa.get());
-        novaDespesa.setBitStatus(1);
-        novaDespesa.setDtCriacao(LocalDateTime.now());
-        Despesa despesaSave = despesaRepository.save(novaDespesa);
-        DespesaConsultaDto despesaCadastrada = DespesaMapper.toDto(despesaSave);
-        return ResponseEntity.status(201).body(despesaSave);
+    private final DespesaService service;
+    public DespesaController(DespesaService service) {
+        this.service = service;
     }
 
-    @GetMapping
-    public ResponseEntity<List<DespesaConsultaDto>> listarDespesa() {
-        List<DespesaConsultaDto> despesas = this.despesaService.listar();
+    @PostMapping("/{idEmpresa}/{idCategoria}")
+    public ResponseEntity<DespesaConsultaDto> cadastrar(@Valid @RequestBody DespesaCriacaoDto dto,
+                                                        @PathVariable Integer idEmpresa,
+                                                        @PathVariable Integer idCategoria) {
+        if (Objects.isNull(dto)) {
+            return ResponseEntity.status(400).build();
+        }
+        DespesaConsultaDto savedDto = service.cadastrar(dto, idEmpresa, idCategoria);
+        return ResponseEntity.ok(savedDto);
+    }
+
+    @GetMapping("/{idEmpresa}/{id}")
+    public ResponseEntity<DespesaConsultaDto> buscarPorId(@PathVariable Integer idEmpresa,
+                                                          @PathVariable Integer id) {
+        DespesaConsultaDto dto = service.retornarPorIdPorEmpresa(id, idEmpresa);
+        if (Objects.isNull(dto)) {
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping("/{idEmpresa}/{id}/{idCategoria}")
+    public ResponseEntity<DespesaConsultaDto> atualizar(@PathVariable Integer idEmpresa,
+                                                        @PathVariable Integer id,
+                                                        @PathVariable Integer idCategoria,
+                                                        @Valid @RequestBody DespesaAtualizarDto dto) {
+        if (Objects.isNull(dto)) {
+            return ResponseEntity.status(400).build();
+        }
+        DespesaConsultaDto updatedDto = service.atualizarPorEmpresa(id, dto, idEmpresa, idCategoria);
+        if (Objects.isNull(updatedDto)) {
+            return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.ok(updatedDto);
+    }
+
+    @DeleteMapping("/{idEmpresa}/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idEmpresa, @PathVariable Integer id) {
+        service.deletarPorId(id, idEmpresa);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/info/{idEmpresa}/{data}")
+    public ResponseEntity<List<DespesaConsultaDto>> listarDespesasDia(
+            @PathVariable Integer idEmpresa,
+            @PathVariable LocalDate data) {
+        List<DespesaConsultaDto> despesas = service.exibirDespesasDia(idEmpresa, data);
         if (despesas.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(despesas);
+        return ResponseEntity.ok(despesas);
     }
 
-    @GetMapping("/empresa/{id}")
-    public ResponseEntity<List<DespesaConsultaDto>> listarDespesaPorEmpresaId(@PathVariable Integer id) {
-        List<DespesaConsultaDto> despesas = this.despesaService.listarPorEmpresaId(id);
+    @GetMapping("/info/{idEmpresa}/{mes}/{ano}")
+    public ResponseEntity<List<DespesaConsultaDto>> listarDespesasMes(
+            @PathVariable Integer idEmpresa,
+            @PathVariable Integer mes,
+            @PathVariable Integer ano) {
+        List<DespesaConsultaDto> despesas = service.exibirDespesasMes(idEmpresa, Month.of(mes), Year.of(ano));
         if (despesas.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
-        return ResponseEntity.status(200).body(despesas);
+        return ResponseEntity.ok(despesas);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DespesaConsultaDto> buscarDespesaPorId(@PathVariable Integer id) {
-        if (!this.despesaService.existePorId(id)) {
-            return ResponseEntity.status(404).build();
-        }
-        DespesaConsultaDto despesa = this.despesaService.buscarPorId(id);
-        return ResponseEntity.status(200).body(despesa);
+    @GetMapping("/total/{idEmpresa}/{mes}/{ano}")
+    public ResponseEntity<Double> calcularDespesaTotalMes(
+            @PathVariable Integer idEmpresa,
+            @PathVariable Integer mes,
+            @PathVariable Integer ano) {
+        Double total = service.calcularDespesaTotalMes(idEmpresa, Month.of(mes), Year.of(ano));
+        return ResponseEntity.ok(total);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DespesaConsultaDto> atualizarDespesaPorId(@PathVariable Integer id, @Valid @RequestBody DespesaAtualizarDto despesaDto) {
-        if (Objects.isNull(despesaDto)) {
-            return ResponseEntity.status(400).build();
-        }
-        if (!this.despesaService.existePorId(id)) {
-            return ResponseEntity.status(404).build();
-        }
-        DespesaConsultaDto despesaAtualizada = this.despesaService.atualizar(id, despesaDto);
-        return ResponseEntity.status(200).body(despesaAtualizada);
+    @GetMapping("/total/{idEmpresa}/{data}")
+    public ResponseEntity<Double> calcularDespesaTotalDia(
+            @PathVariable Integer idEmpresa,
+            @PathVariable LocalDate data) {
+        Double total = service.calcularDespesaTotalDia(idEmpresa, data);
+        return ResponseEntity.ok(total);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirDespesa(@PathVariable Integer id) {
-        if (!this.despesaService.existePorId(id)) {
-            return ResponseEntity.status(404).build();
-        }
-        this.despesaService.excluirPorId(id);
-        return ResponseEntity.status(200).build();
-    }
-
 
 }

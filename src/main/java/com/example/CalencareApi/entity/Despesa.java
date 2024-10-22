@@ -15,9 +15,10 @@ public class Despesa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nome;
-    private String descricao;
+    private String observacao;
     private Double valor;
-    @CreationTimestamp
+    private String formaPagamento;
+    private LocalDateTime dtPagamento;
     private LocalDateTime dtCriacao;
     private Integer bitStatus;
     @ManyToOne

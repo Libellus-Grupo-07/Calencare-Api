@@ -14,15 +14,13 @@ public class DespesaCriacaoDto {
     @NotBlank
     private String nome;
     @Size(min = 5, max = 255)
-    private String descricao;
+    private String observacao;
     @NotNull
     private Double valor;
     @NotNull
+    private String formaPagamento;
+    @NotNull
+    private LocalDateTime dtPagamento;
+    @NotNull
     private LocalDateTime dtCriacao;
-    @NotNull
-    private Integer bitStatus;
-    @NotNull
-    private Empresa empresa;
-    @NotNull
-    private CategoriaDespesa categoriaDespesa;
 }

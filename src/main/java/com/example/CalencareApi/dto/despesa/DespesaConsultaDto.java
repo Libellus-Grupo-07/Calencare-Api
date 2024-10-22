@@ -12,9 +12,11 @@ import java.time.LocalDateTime;
 public class DespesaConsultaDto {
     private Integer id;
     private String nome;
-    private String descricao;
+    private String observacao;
     private Double valor;
-    private LocalDateTime dtCriacao;
-    private Empresa empresa;
-    private CategoriaDespesa categoriaDespesa;
+    private String formaPagamento;
+    private LocalDateTime dtPagamento;
+    private Integer empresaId;
+    private String categoriaDespesaNome;
+    private Integer categoriaDespesaId;
 }

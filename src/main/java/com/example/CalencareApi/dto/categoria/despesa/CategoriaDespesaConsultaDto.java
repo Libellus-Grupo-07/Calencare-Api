@@ -9,5 +9,4 @@ public class CategoriaDespesaConsultaDto {
 
     private Integer id;
     private String nome;
-    private String descricao;
 }
