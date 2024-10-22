@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
@@ -96,10 +97,8 @@ public class DespesaService {
                 despesaDto.getValor() == null ? despesaAtualizacao.getValor() : despesaDto.getValor());
         despesaAtualizacao.setFormaPagamento(
                 despesaDto.getFormaPagamento() == null ? despesaAtualizacao.getFormaPagamento() : despesaDto.getFormaPagamento());
-        despesaAtualizacao.setDtCriacao(
-                despesaDto.getDtCriacao() == null ? despesaAtualizacao.getDtCriacao() : despesaDto.getDtCriacao());
-        despesaAtualizacao.setDtCriacao(
-                despesaDto.getDtCriacao() == null ? despesaAtualizacao.getDtCriacao() : despesaDto.getDtCriacao());
+        despesaAtualizacao.setDtPagamento(
+                despesaDto.getDtPagamento() == null ? despesaAtualizacao.getDtPagamento() : despesaDto.getDtPagamento());
         despesaAtualizacao.setBitStatus(
                 despesaDto.getBitStatus() == null ? despesaAtualizacao.getBitStatus() : despesaDto.getBitStatus());
 
@@ -155,7 +154,7 @@ public class DespesaService {
         return total;
     }
 
-    public Double calcularDespesaTotalDia (Integer empresaId, LocalDateTime data) {
+    public Double calcularDespesaTotalDia (Integer empresaId, LocalDate data) {
         LocalDateTime dataInicioTransformada = LocalDateTime.of(data.getYear(), data.getMonth(), data.getDayOfMonth(), 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusDays(1).minusSeconds(1);
         List<Despesa> despesas = despesaRepository.encontrarDespesasPeriodo(empresaId, dataInicioTransformada, dataFimTransformada);
@@ -169,7 +168,7 @@ public class DespesaService {
         return total;
     }
 
-    public List<DespesaConsultaDto> exibirDespesasDia (Integer empresaId, LocalDateTime data) {
+    public List<DespesaConsultaDto> exibirDespesasDia (Integer empresaId, LocalDate data) {
         LocalDateTime dataInicioTransformada = LocalDateTime.of(data.getYear(), data.getMonth(), data.getDayOfMonth(), 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusDays(1).minusSeconds(1);
         List<Despesa> despesas = despesaRepository.encontrarDespesasPeriodo(empresaId, dataInicioTransformada, dataFimTransformada);

@@ -26,8 +26,9 @@ public class ProdutoMapper {
         produto.setNome(dto.getNome());
         produto.setDescricao(dto.getDescricao());
         produto.setMarca(dto.getMarca());
-        produto.setCategoriaProduto(dto.getCategoriaProduto());
-        produto.setEmpresa(dto.getEmpresa());
+        produto.setCategoriaProdutoNome(dto.getCategoriaProduto().getNome());
+        produto.setCategoriaProdutoId(dto.getCategoriaProduto().getId());
+        produto.setEmpresaId(dto.getEmpresa().getId());
         return produto;
     }
 

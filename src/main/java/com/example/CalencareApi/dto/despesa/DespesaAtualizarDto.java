@@ -12,6 +12,6 @@ public class DespesaAtualizarDto {
     private String observacao;
     private Double valor;
     private String formaPagamento;
-    private LocalDateTime dtCriacao;
+    private LocalDateTime dtPagamento;
     private Integer bitStatus;
 }

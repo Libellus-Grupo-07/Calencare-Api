@@ -21,20 +21,18 @@ public class ProdutoService {
     @Autowired private CategoriaProdutoService categoriaProdutoService;
 
     public ProdutoConsultaDto cadastrar(
-            ProdutoCriacaoDto dto,
-            Integer categoria,
-            Integer idEmpresa) {
+            ProdutoCriacaoDto dto) {
         if (dto == null) {
             return null;
         }
-        if (empresaService.buscarEmpresaPorId(idEmpresa) == null) {
+        Empresa empresa = empresaService.buscarEntidadePorId(dto.getEmpresaId());
+        CategoriaProduto categoriaProduto = categoriaProdutoService.buscarEntidadePorId(dto.getCategoriaProdutoId());
+        if (empresaService.buscarEmpresaPorId(dto.getEmpresaId()) == null) {
             return null;
         }
-        if (categoriaProdutoService.buscarPorId(categoria) == null) {
+        if (categoriaProdutoService.buscarPorId(dto.getCategoriaProdutoId()) == null) {
             return null;
         }
-        Empresa empresa = empresaService.buscarEntidadePorId(idEmpresa);
-        CategoriaProduto categoriaProduto = categoriaProdutoService.buscarEntidadePorId(categoria);
         Produto produto = ProdutoMapper.toEntity(dto);
         produto.setEmpresa(empresa);
         produto.setCategoriaProduto(categoriaProduto);
@@ -54,21 +52,29 @@ public class ProdutoService {
         return ProdutoMapper.toDto(produto);
     }
 
-    private Produto buscarEntidadePorId(Integer id) {
+    public Produto buscarEntidadePorId(Integer id) {
         return this.produtoRepository.findById(id).orElse(null);
     }
 
 
     public ProdutoConsultaDto atualizar(ProdutoAtualizarDto dto,
                                         Integer idProduto,
-                                        Integer idEmpresa,
-                                        Integer idCategoria) {
+                                        Integer idEmpresa) {
+        if (dto == null) {
+            return null;
+        }
         Produto produtoAtualizacao = this.buscarEntidadePorId(idProduto);
-        if (produtoAtualizacao == null) { return null; }
+        CategoriaProduto categoriaProduto = categoriaProdutoService
+                .buscarEntidadePorId(produtoAtualizacao.getCategoriaProduto().getId());
+        if (dto.getCategoriaProdutoId() != null) {
+            categoriaProduto = categoriaProdutoService.buscarEntidadePorId(dto.getCategoriaProdutoId());
+            if (categoriaProduto == null) {
+                return null;
+            }
+        }
         if (!produtoAtualizacao.getEmpresa().getId().equals(idEmpresa)) { return null; }
-        if (categoriaProdutoService.buscarEntidadePorId(idCategoria) == null) { return null; }
+        if (categoriaProduto == null) { return null; }
 
-        CategoriaProduto categoriaProduto = categoriaProdutoService.buscarEntidadePorId(idCategoria);
         Empresa empresa = empresaService.buscarEntidadePorId(idEmpresa);
 
         produtoAtualizacao.setNome(dto.getNome() == null ? produtoAtualizacao.getNome() : dto.getNome());
@@ -96,6 +102,4 @@ public class ProdutoService {
         produto.setBitStatus(0);
         this.produtoRepository.save(produto);
     }
-
-
 }

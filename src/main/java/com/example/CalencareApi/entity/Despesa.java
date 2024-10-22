@@ -18,6 +18,7 @@ public class Despesa {
     private String observacao;
     private Double valor;
     private String formaPagamento;
+    private LocalDateTime dtPagamento;
     private LocalDateTime dtCriacao;
     private Integer bitStatus;
     @ManyToOne

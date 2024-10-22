@@ -14,7 +14,7 @@ public interface DespesaRepository extends JpaRepository<Despesa, Integer> {
 
     List<Despesa> findByEmpresaId (Integer id);
 
-    @Query("SELECT d FROM Despesa d WHERE d.empresa.id = :id AND d.bitStatus = 1 AND d.dtCriacao BETWEEN :dataInicio AND :dataFim")
+    @Query("SELECT d FROM Despesa d WHERE d.empresa.id = :id AND d.bitStatus = 1 AND d.dtPagamento BETWEEN :dataInicio AND :dataFim")
     List<Despesa> encontrarDespesasPeriodo(Integer id, LocalDateTime dataInicio, LocalDateTime dataFim);
 
 }

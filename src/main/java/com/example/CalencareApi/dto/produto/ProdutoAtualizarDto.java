@@ -10,5 +10,5 @@ public class ProdutoAtualizarDto {
     private String nome;
     private String descricao;
     private String marca;
-    private CategoriaProduto categoriaProduto;
+    private Integer categoriaProdutoId;
 }

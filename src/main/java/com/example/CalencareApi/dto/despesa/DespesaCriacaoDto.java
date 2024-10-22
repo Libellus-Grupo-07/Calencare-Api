@@ -20,9 +20,7 @@ public class DespesaCriacaoDto {
     @NotNull
     private String formaPagamento;
     @NotNull
+    private LocalDateTime dtPagamento;
+    @NotNull
     private LocalDateTime dtCriacao;
-    @NotNull
-    private Empresa empresa;
-    @NotNull
-    private CategoriaDespesa categoriaDespesa;
 }

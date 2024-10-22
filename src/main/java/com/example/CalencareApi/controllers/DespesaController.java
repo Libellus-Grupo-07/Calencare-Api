@@ -7,6 +7,8 @@ import com.example.CalencareApi.service.DespesaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
@@ -67,7 +69,7 @@ public class DespesaController {
     @GetMapping("/info/{idEmpresa}/{data}")
     public ResponseEntity<List<DespesaConsultaDto>> listarDespesasDia(
             @PathVariable Integer idEmpresa,
-            @PathVariable LocalDateTime data) {
+            @PathVariable LocalDate data) {
         List<DespesaConsultaDto> despesas = service.exibirDespesasDia(idEmpresa, data);
         if (despesas.isEmpty()) {
             return ResponseEntity.status(204).build();
@@ -78,9 +80,9 @@ public class DespesaController {
     @GetMapping("/info/{idEmpresa}/{mes}/{ano}")
     public ResponseEntity<List<DespesaConsultaDto>> listarDespesasMes(
             @PathVariable Integer idEmpresa,
-            @PathVariable Month mes,
-            @PathVariable Year ano) {
-        List<DespesaConsultaDto> despesas = service.exibirDespesasMes(idEmpresa, mes, ano);
+            @PathVariable Integer mes,
+            @PathVariable Integer ano) {
+        List<DespesaConsultaDto> despesas = service.exibirDespesasMes(idEmpresa, Month.of(mes), Year.of(ano));
         if (despesas.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -90,16 +92,16 @@ public class DespesaController {
     @GetMapping("/total/{idEmpresa}/{mes}/{ano}")
     public ResponseEntity<Double> calcularDespesaTotalMes(
             @PathVariable Integer idEmpresa,
-            @PathVariable Month mes,
-            @PathVariable Year ano) {
-        Double total = service.calcularDespesaTotalMes(idEmpresa, mes, ano);
+            @PathVariable Integer mes,
+            @PathVariable Integer ano) {
+        Double total = service.calcularDespesaTotalMes(idEmpresa, Month.of(mes), Year.of(ano));
         return ResponseEntity.ok(total);
     }
 
     @GetMapping("/total/{idEmpresa}/{data}")
     public ResponseEntity<Double> calcularDespesaTotalDia(
             @PathVariable Integer idEmpresa,
-            @PathVariable LocalDateTime data) {
+            @PathVariable LocalDate data) {
         Double total = service.calcularDespesaTotalDia(idEmpresa, data);
         return ResponseEntity.ok(total);
     }

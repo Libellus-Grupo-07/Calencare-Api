@@ -21,12 +21,10 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
-    @PostMapping("/{idEmpresa}/{idCategoria}")
-    public ResponseEntity<ProdutoConsultaDto> cadastrar(@Valid @RequestBody ProdutoCriacaoDto dto,
-                                                        @PathVariable Integer idCategoria,
-                                                        @PathVariable Integer idEmpresa) {
+    @PostMapping
+    public ResponseEntity<ProdutoConsultaDto> cadastrar(@Valid @RequestBody ProdutoCriacaoDto dto) {
         if (Objects.isNull(dto)) { return ResponseEntity.status(400).build(); }
-        ProdutoConsultaDto savedDto = produtoService.cadastrar(dto, idCategoria, idEmpresa);
+        ProdutoConsultaDto savedDto = produtoService.cadastrar(dto);
         return ResponseEntity.ok(savedDto);
     }
 
@@ -38,13 +36,12 @@ public class ProdutoController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/{idEmpresa}/{idProduto}/{idCategoria}")
+    @PutMapping("/{idEmpresa}/{idProduto}")
     public ResponseEntity<ProdutoConsultaDto> atualizar(@PathVariable Integer idEmpresa,
                                                         @PathVariable Integer idProduto,
-                                                        @PathVariable Integer idCategoria,
                                                         @Valid @RequestBody ProdutoAtualizarDto dto) {
         if (Objects.isNull(dto)) { return ResponseEntity.status(400).build(); }
-        ProdutoConsultaDto updatedDto = produtoService.atualizar(dto, idProduto, idEmpresa, idCategoria);
+        ProdutoConsultaDto updatedDto = produtoService.atualizar(dto, idProduto, idEmpresa);
         if (Objects.isNull(updatedDto)) { return ResponseEntity.status(404).build(); }
         return ResponseEntity.ok(updatedDto);
     }
@@ -57,7 +54,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{idEmpresa}/buscar-nome")
-    public ResponseEntity<List<ProdutoConsultaDto>> buscarPorNome(@PathVariable Integer idEmpresa,
+    public ResponseEntity<List<ProdutoConsultaDto>> buscarPorNomeOuMarca(@PathVariable Integer idEmpresa,
                                                                   @RequestParam String nome) {
         List<ProdutoConsultaDto> produtos = produtoService.buscarPorNomeOuMarca(idEmpresa, nome);
         if (produtos.isEmpty()) { return ResponseEntity.status(204).build(); }

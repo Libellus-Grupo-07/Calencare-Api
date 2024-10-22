@@ -11,6 +11,7 @@ public class ProdutoConsultaDto {
     private String nome;
     private String descricao;
     private String marca;
-    private CategoriaProduto categoriaProduto;
-    private Empresa empresa;
+    private Integer categoriaProdutoId;
+    private String categoriaProdutoNome;
+    private Integer empresaId;
 }

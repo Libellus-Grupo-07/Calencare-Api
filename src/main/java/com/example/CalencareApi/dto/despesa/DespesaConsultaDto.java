@@ -15,7 +15,8 @@ public class DespesaConsultaDto {
     private String observacao;
     private Double valor;
     private String formaPagamento;
-    private LocalDateTime dtCriacao;
-    private Empresa empresa;
-    private CategoriaDespesa categoriaDespesa;
+    private LocalDateTime dtPagamento;
+    private Integer empresaId;
+    private String categoriaDespesaNome;
+    private Integer categoriaDespesaId;
 }

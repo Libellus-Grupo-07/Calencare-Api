@@ -3,6 +3,7 @@ package com.example.CalencareApi.dto.produto;
 import com.example.CalencareApi.entity.CategoriaProduto;
 import com.example.CalencareApi.entity.Empresa;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +15,8 @@ public class ProdutoCriacaoDto {
     private String descricao;
     @NotBlank
     private String marca;
-    @NotBlank
-    private CategoriaProduto categoriaProduto;
-    @NotBlank
-    private Empresa empresa;
+    @NotNull
+    private Integer categoriaProdutoId;
+    @NotNull
+    private Integer empresaId;
 }
