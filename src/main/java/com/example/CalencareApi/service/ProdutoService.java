@@ -3,6 +3,7 @@ package com.example.CalencareApi.service;
 import com.example.CalencareApi.dto.produto.ProdutoAtualizarDto;
 import com.example.CalencareApi.dto.produto.ProdutoConsultaDto;
 import com.example.CalencareApi.dto.produto.ProdutoCriacaoDto;
+import com.example.CalencareApi.dto.validade.ValidadeConsultaDto;
 import com.example.CalencareApi.entity.CategoriaProduto;
 import com.example.CalencareApi.entity.Empresa;
 import com.example.CalencareApi.entity.Produto;
@@ -19,6 +20,7 @@ public class ProdutoService {
     @Autowired private ProdutoRepository produtoRepository;
     @Autowired private EmpresaService empresaService;
     @Autowired private CategoriaProdutoService categoriaProdutoService;
+    @Autowired private ValidadeService validadeService;
 
     public ProdutoConsultaDto cadastrar(
             ProdutoCriacaoDto dto) {
@@ -98,6 +100,12 @@ public class ProdutoService {
         Produto produto = this.produtoRepository.findByIdAndEmpresaId(id, idEmpresa);
         if (produto == null) {
             return;
+        }
+        List<ValidadeConsultaDto> validades = validadeService.buscarPorIdProduto(id);
+        if (validades != null) {
+            for (ValidadeConsultaDto validade : validades) {
+                validadeService.deletar(validade.getId());
+            }
         }
         produto.setBitStatus(0);
         this.produtoRepository.save(produto);

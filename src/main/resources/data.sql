@@ -165,5 +165,5 @@
         (1, CURRENT_TIMESTAMP, 10, 1, 3),
         (1, CURRENT_TIMESTAMP, -3, 1, 3),
         (1, CURRENT_TIMESTAMP, 20, 1, 4),
-        (1, CURRENT_TIMESTAMP, 20, 1, 5),
-        (1, CURRENT_TIMESTAMP, 20, 1, 6);
+        (1, CURRENT_TIMESTAMP, 20, 1, 6),
+        (1, CURRENT_TIMESTAMP, 20, 1, 7);

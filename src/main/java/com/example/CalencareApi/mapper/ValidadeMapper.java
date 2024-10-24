@@ -22,7 +22,9 @@ public class ValidadeMapper {
         ValidadeConsultaDto validadeConsultaDto = new ValidadeConsultaDto();
         validadeConsultaDto.setId(validade.getId());
         validadeConsultaDto.setDescricao(validade.getDescricao());
-        validadeConsultaDto.setDtValidade(validade.getDtValidade().toString());
+        if (validade.getDtValidade() != null) {
+            validadeConsultaDto.setDtValidade(validade.getDtValidade().toString());
+        }
         validadeConsultaDto.setBitStatus(validade.getBitStatus());
         validadeConsultaDto.setProdutoId(validade.getProduto().getId());
         return validadeConsultaDto;
