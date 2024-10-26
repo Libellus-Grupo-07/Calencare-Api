@@ -12,6 +12,7 @@ import com.example.CalencareApi.repository.DespesaRepository;
 import com.example.CalencareApi.repository.EmpresaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 @Service
@@ -186,6 +188,12 @@ public class DespesaService {
             return null;
         }
         return DespesaMapper.toDto(despesas);
+    }
+
+    public List<Map<String, Object>> getListaDespesaDiaria(Integer empresaId, Month mes, Year ano) {
+        LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
+        LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
+        return despesaRepository.getDespesaDiaria(empresaId, dataInicioTransformada, dataFimTransformada);
     }
 
     public Boolean existePorId(Integer id) {

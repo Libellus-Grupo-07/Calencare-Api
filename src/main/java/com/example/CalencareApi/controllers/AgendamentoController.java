@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -454,5 +455,15 @@ public class AgendamentoController {
 
         List<HorarioFuncionamento> horarios = horarioFuncionamentoRepository.findByEmpresaEquals(empresa.get());
     }*/
+
+    // testando finanças
+
+    @GetMapping("/financas/receita-diaria/{empresaId}/{mes}/{ano}")
+    public ResponseEntity<List<Map<String, Object>>> getReceitaDiaria(@PathVariable Integer empresaId,
+                                                   @PathVariable Integer mes,
+                                                   @PathVariable Integer ano) {
+        List<Map<String, Object>> receita = agendamentoService.getReceitaDiaria(empresaId, Month.of(mes), Year.of(ano));
+        return new ResponseEntity<>(receita, HttpStatus.OK);
+    }
 
 }

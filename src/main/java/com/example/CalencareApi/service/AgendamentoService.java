@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AgendamentoService {
@@ -386,6 +387,14 @@ public class AgendamentoService {
         if (lucro == 0.0) { return 0.0; }
         return lucro - getComissaoMes(empresaId, mes, ano);
     }
+
+    public List<Map<String, Object>> getReceitaDiaria(Integer empresaId, Month mes, Year ano) {
+        LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
+        LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
+        return agendamentoRepository.getReceitaDiaria(empresaId, dataInicioTransformada, dataFimTransformada);
+    }
+
+
 
 
 
