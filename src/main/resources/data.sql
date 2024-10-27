@@ -153,7 +153,7 @@
         ('2025-06-01 00:00:00', CURRENT_TIMESTAMP, 3, 1),
         ('2025-10-01 00:00:00', CURRENT_TIMESTAMP, 3, 1),
         ('2025-07-01 00:00:00', CURRENT_TIMESTAMP, 2, 1),
-        ('2025-08-24 00:00:00', CURRENT_TIMESTAMP, 4, 1),
+        (null, CURRENT_TIMESTAMP, 4, 1),
         ('2025-09-27 00:00:00', CURRENT_TIMESTAMP, 5, 1),
         ('1900-01-01 00:00:00', CURRENT_TIMESTAMP, 5, 1);
 
@@ -166,4 +166,9 @@
         (1, CURRENT_TIMESTAMP, -3, 1, 3),
         (1, CURRENT_TIMESTAMP, 20, 1, 4),
         (1, CURRENT_TIMESTAMP, 20, 1, 6),
-        (1, CURRENT_TIMESTAMP, 20, 1, 7);
+        (1, CURRENT_TIMESTAMP, 20, 1, 7),
+        (1, CURRENT_TIMESTAMP, 50, 1, 5),
+        (1, CURRENT_TIMESTAMP, -30, 1, 5),
+        (1, CURRENT_TIMESTAMP, -10, 1, 5),
+        (1, CURRENT_TIMESTAMP, 20, 1, 5),
+        (1, CURRENT_TIMESTAMP, 20, 1, 5);

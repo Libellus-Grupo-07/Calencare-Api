@@ -7,7 +7,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/movimentacao-validade")
@@ -62,6 +64,30 @@ public class MovimentacaoValidadeController {
     public ResponseEntity<Integer> retornarQuantidadeTodasValidadesProduto(@PathVariable Integer idProduto) {
         Integer quantidade = movimentacaoValidadeService.retornarQuantidadeTodasValidadesProduto(idProduto);
         return ResponseEntity.ok(quantidade);
+    }
+
+    // kpi
+
+    @GetMapping("/kpi/produtos-ok/{idEmpresa}")
+    public ResponseEntity<Integer> retornarQuantidadeProdutosAlta(@PathVariable Integer idEmpresa) {
+        return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosAlta(idEmpresa));
+    }
+
+    @GetMapping("/kpi/produtos-baixo/{idEmpresa}")
+    public ResponseEntity<Integer> retornarQuantidadeProdutosBaixa(@PathVariable Integer idEmpresa) {
+        return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosBaixa(idEmpresa));
+    }
+
+    @GetMapping("/kpi/sem-estoque/{idEmpresa}")
+    public ResponseEntity<Integer> retornarQuantidadeProdutosSemEstoque(@PathVariable Integer idEmpresa) {
+        return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosSemEstoque(idEmpresa));
+    }
+
+    @GetMapping("/kpi/reposicao/{idEmpresa}/{data}")
+    public ResponseEntity<Integer> retornarQuantidadeProdutosReposicao(
+            @PathVariable Integer idEmpresa,
+            @PathVariable LocalDate data) {
+        return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosRepostosDia(idEmpresa, data));
     }
 
 }
