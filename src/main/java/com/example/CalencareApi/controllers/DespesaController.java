@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -104,6 +105,20 @@ public class DespesaController {
             @PathVariable LocalDate data) {
         Double total = service.calcularDespesaTotalDia(idEmpresa, data);
         return ResponseEntity.ok(total);
+    }
+
+    // testando finanças
+
+    @GetMapping("/financas/{idEmpresa}/{mes}/{ano}")
+    public ResponseEntity<List<Map<String, Object>>> listarDespesasMesFinancas(
+            @PathVariable Integer idEmpresa,
+            @PathVariable Integer mes,
+            @PathVariable Integer ano) {
+        List<Map<String, Object>> despesas = service.getListaDespesaDiaria(idEmpresa, Month.of(mes), Year.of(ano));
+        if (despesas.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.ok(despesas);
     }
 
 }

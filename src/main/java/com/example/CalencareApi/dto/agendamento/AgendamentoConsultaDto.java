@@ -17,6 +17,7 @@ public class AgendamentoConsultaDto implements ValidaStatus {
     private String nomeCliente;
     private String nomeServico;
     private Double preco;
+    private Double comissao;
     private Integer status;
     private Integer duracaoServico;
     private String metodoPagamento;

@@ -24,6 +24,9 @@ public class ValidadeService {
     public ValidadeConsultaDto cadastrar(ValidadeCriacaoDto validadeCriacaoDto) {
         Produto produto = produtoRepository.findById(validadeCriacaoDto.getIdProduto()).orElseThrow();
         Validade validade = ValidadeMapper.toEntity(validadeCriacaoDto);
+        if (validade.getDtValidade() == null) {
+            validade.setDescricao("Indefinido");
+        }
         validade.setProduto(produto);
         validade = validadeRepository.save(validade);
         return ValidadeMapper.toDto(validade);

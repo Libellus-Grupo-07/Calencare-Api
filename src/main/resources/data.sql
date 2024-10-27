@@ -78,24 +78,24 @@
         ('2024-07-14 22:00:00', 3, 4, 3, 2), -- Cancelado
         ('2024-07-15 23:00:00', 5, 5, 1, 3); -- Finalizado
 --
---     INSERT INTO agendamento(dt_hora, bit_status, cliente_id, funcionario_id, servico_preco_id)
---     VALUES
---
---         ('2024-06-13 09:00:00', 2, 1, 1, 1), -- Pendente
---         ('2024-06-13 10:00:00', 3, 2, 1, 2), -- Cancelado
---         ('2024-06-13 11:00:00', 5, 3, 2, 3), -- Finalizado
---         ('2024-06-13 12:00:00', 2, 4, 2, 1), -- Pendente
---         ('2024-06-14 13:00:00', 3, 5, 3, 2), -- Cancelado
---         ('2024-06-14 14:00:00', 5, 1, 1, 3), -- Finalizado
---         ('2024-06-13 15:00:00', 2, 2, 2, 1), -- Pendente
---         ('2024-06-13 16:00:00', 3, 3, 3, 2), -- Cancelado
---         ('2024-06-13 17:00:00', 5, 4, 1, 3), -- Finalizado
---         ('2024-06-13 18:00:00', 2, 5, 2, 1), -- Pendente
---         ('2024-06-13 19:00:00', 3, 1, 3, 2), -- Cancelado
---         ('2024-06-13 20:00:00', 5, 2, 1, 3), -- Finalizado
---         ('2024-06-13 21:00:00', 2, 3, 2, 1), -- Pendente
---         ('2024-06-13 22:00:00', 3, 4, 3, 2), -- Cancelado
---         ('2024-06-13 23:00:00', 5, 5, 1, 3), -- Finalizado
+    INSERT INTO agendamento(dt_hora, bit_status, cliente_id, funcionario_id, servico_preco_id)
+    VALUES
+
+        ('2024-06-13 09:00:00', 2, 1, 1, 1), -- Pendente
+        ('2024-06-13 10:00:00', 3, 2, 1, 2), -- Cancelado
+        ('2024-06-13 11:00:00', 5, 3, 2, 3), -- Finalizado
+        ('2024-06-13 12:00:00', 2, 4, 2, 1), -- Pendente
+        ('2024-06-14 13:00:00', 3, 5, 3, 2), -- Cancelado
+        ('2024-06-14 14:00:00', 5, 1, 1, 3), -- Finalizado
+        ('2024-06-13 15:00:00', 2, 2, 2, 1), -- Pendente
+        ('2024-06-13 16:00:00', 3, 3, 3, 2), -- Cancelado
+        ('2024-06-13 17:00:00', 5, 4, 1, 3), -- Finalizado
+        ('2024-06-13 18:00:00', 2, 5, 2, 1), -- Pendente
+        ('2024-06-13 19:00:00', 3, 1, 3, 2), -- Cancelado
+        ('2024-06-13 20:00:00', 5, 2, 1, 3), -- Finalizado
+        ('2024-06-13 21:00:00', 2, 3, 2, 1), -- Pendente
+        ('2024-06-13 22:00:00', 3, 4, 3, 2), -- Cancelado
+        ('2024-06-13 23:00:00', 5, 5, 1, 3); -- Finalizado
 --
 --
 --         ('2024-07-08 09:00:00', 1, 1, 1, 1),
@@ -123,11 +123,11 @@
 
     INSERT INTO despesa (nome, observacao, valor, forma_pagamento, dt_pagamento, bit_status, empresa_id, categoria_despesa_id)
     VALUES
-        ('Compra de Materiais', 'Compra de materiais descartáveis', 150.00, 'Cartão de Crédito', '2023-01-01 10:00:00', 1, 1, 1),
-        ('Compra de Materiais', 'Compra de materiais descartáveis', 150.00, 'Cartão de Crédito', '2023-01-01 10:00:00', 1, 1, 1),
-        ('Compra de Materiais', 'Compra de materiais descartáveis', 150.00, 'Cartão de Crédito', '2023-01-01 10:00:00', 1, 1, 1),
-        ('Serviços de Limpeza', 'Pagamento de serviços de limpeza', 300.00, 'Transferência Bancária', '2023-01-02 11:00:00', 1, 1, 3),
-        ('Compra de Produtos de Beleza', 'Compra de produtos de beleza para revenda', 500.00, 'Dinheiro', '2023-01-03 12:00:00', 1, 1, 2);
+        ('Compra de Materiais', 'Compra de materiais descartáveis', 150.00, 'Cartão de Crédito', '2024-06-13 10:00:00', 1, 1, 1),
+        ('Compra de Materiais', 'Compra de materiais descartáveis', 150.00, 'Cartão de Crédito', '2024-06-13 10:00:00', 1, 1, 1),
+        ('Compra de Materiais', 'Compra de materiais descartáveis', 150.00, 'Cartão de Crédito', '2024-06-12 10:00:00', 1, 1, 1),
+        ('Serviços de Limpeza', 'Pagamento de serviços de limpeza', 300.00, 'Transferência Bancária', '2024-06-14 11:00:00', 1, 1, 3),
+        ('Compra de Produtos de Beleza', 'Compra de produtos de beleza para revenda', 500.00, 'Dinheiro', '2024-06-14 12:00:00', 1, 1, 2);
 
 -- Inserir registros na tabela categoria_produto
     INSERT INTO categoria_produto (nome)
@@ -153,7 +153,7 @@
         ('2025-06-01 00:00:00', CURRENT_TIMESTAMP, 3, 1),
         ('2025-10-01 00:00:00', CURRENT_TIMESTAMP, 3, 1),
         ('2025-07-01 00:00:00', CURRENT_TIMESTAMP, 2, 1),
-        ('2025-08-24 00:00:00', CURRENT_TIMESTAMP, 4, 1),
+        (null, CURRENT_TIMESTAMP, 4, 1),
         ('2025-09-27 00:00:00', CURRENT_TIMESTAMP, 5, 1),
         ('1900-01-01 00:00:00', CURRENT_TIMESTAMP, 5, 1);
 
@@ -165,5 +165,10 @@
         (1, CURRENT_TIMESTAMP, 10, 1, 3),
         (1, CURRENT_TIMESTAMP, -3, 1, 3),
         (1, CURRENT_TIMESTAMP, 20, 1, 4),
+        (1, CURRENT_TIMESTAMP, 20, 1, 6),
+        (1, CURRENT_TIMESTAMP, 20, 1, 7),
+        (1, CURRENT_TIMESTAMP, 50, 1, 5),
+        (1, CURRENT_TIMESTAMP, -30, 1, 5),
+        (1, CURRENT_TIMESTAMP, -10, 1, 5),
         (1, CURRENT_TIMESTAMP, 20, 1, 5),
-        (1, CURRENT_TIMESTAMP, 20, 1, 6);
+        (1, CURRENT_TIMESTAMP, 20, 1, 5);

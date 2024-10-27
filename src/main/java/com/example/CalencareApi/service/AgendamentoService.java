@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AgendamentoService {
@@ -349,6 +350,51 @@ public class AgendamentoService {
 
         return bytes;
     }
+
+    // FINANÇAS //////////////////////////////////////////////////////////////////////////////
+
+    public Double getReceitasMes(Integer empresaId, Month mes, Year ano) {
+        LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
+        LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
+        List<AgendamentoConsultaDto> lista = listarAgendamentosPorPeriodoEmpresa(
+                empresaId, dataInicioTransformada, dataFimTransformada);
+        Double receitas = 0.0;
+        for (AgendamentoConsultaDto agendamento : lista) {
+            receitas += agendamento.getValorServico();
+        }
+        return receitas;
+    }
+
+    public Double getComissaoMes(Integer empresaId, Month mes, Year ano) {
+        LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
+        LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
+        List<AgendamentoConsultaDto> lista = listarAgendamentosPorPeriodoEmpresa(
+                empresaId, dataInicioTransformada, dataFimTransformada);
+        Double comissao = 0.0;
+        for (AgendamentoConsultaDto agendamento : lista) {
+            comissao +=   agendamento.getValorServico() * agendamento.getComissao();
+        }
+        return comissao;
+    }
+
+    public Double getLucroMes(Integer empresaId, Month mes, Year ano) {
+        LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
+        LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
+        List<AgendamentoConsultaDto> lista = listarAgendamentosPorPeriodoEmpresa(
+                empresaId, dataInicioTransformada, dataFimTransformada);
+        Double lucro = 0.0;
+        for (AgendamentoConsultaDto agendamento : lista) { lucro += agendamento.getValorServico(); }
+        if (lucro == 0.0) { return 0.0; }
+        return lucro - getComissaoMes(empresaId, mes, ano);
+    }
+
+    public List<Map<String, Object>> getReceitaDiaria(Integer empresaId, Month mes, Year ano) {
+        LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
+        LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
+        return agendamentoRepository.getReceitaDiaria(empresaId, dataInicioTransformada, dataFimTransformada);
+    }
+
+
 
 
 

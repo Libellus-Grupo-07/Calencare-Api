@@ -1,4 +1,5 @@
 package com.example.CalencareApi.service;
+import com.example.CalencareApi.dto.produto.ProdutoConsultaDto;
 import com.example.CalencareApi.dto.validade.movimentacao.MovimentacaoValidadeConsultaDto;
 import com.example.CalencareApi.dto.validade.movimentacao.MovimentacaoValidadeCriacaoDto;
 import com.example.CalencareApi.entity.MovimentacaoValidade;
@@ -10,13 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MovimentacaoValidadeService {
 
     @Autowired MovimentacaoValidadeRepository movimentacaoValidadeRepository;
     @Autowired ValidadeRepository validadeRepository;
+    @Autowired ProdutoService produtoService;
 
     public MovimentacaoValidadeConsultaDto cadastrar(MovimentacaoValidadeCriacaoDto dto) {
         Validade validade = validadeRepository.findById(dto.getIdValidade()).orElseThrow();
@@ -88,4 +94,74 @@ public class MovimentacaoValidadeService {
 
         return MovimentacaoValidadeMapper.toDto(movimentacaoValidade);
     }
+
+    // KPIS
+    /*public Double retornarMediaEstoqueProduto(Integer idProduto) {
+        return movimentacaoValidadeRepository.findAverageByProdutoId(idProduto);
+    }*/
+
+    public List<Map<String,Object>> retornarQuantidadeMediaProdutos(Integer idEmpresa) {
+        return movimentacaoValidadeRepository.findAverageByProdutoId(idEmpresa);
+    }
+
+    public Integer retornarQuantidadeProdutosAlta (Integer idEmpresa) {
+        List<Map<String,Object>> mediaProdutos = retornarQuantidadeMediaProdutos(idEmpresa);
+        Integer contador = 0;
+
+        for (Map<String,Object> mediaProduto : mediaProdutos) {
+            Integer idProduto = (Integer) mediaProduto.get("id_prod");
+            Double media = (Double) mediaProduto.get("qntd");
+            Integer qntdAtual = retornarQuantidadeTodasValidadesProduto(idProduto);
+            Double porcentagemRelativa = (media * 100) / qntdAtual;
+            if (porcentagemRelativa > 30.0) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    public Integer retornarQuantidadeProdutosBaixa (Integer idEmpresa) {
+        List<Map<String,Object>> mediaProdutos = retornarQuantidadeMediaProdutos(idEmpresa);
+        Integer contador = 0;
+
+        for (Map<String,Object> mediaProduto : mediaProdutos) {
+            Integer idProduto = (Integer) mediaProduto.get("id_prod");
+            Double media = (Double) mediaProduto.get("qntd");
+            Integer qntdAtual = retornarQuantidadeTodasValidadesProduto(idProduto);
+            Double porcentagemRelativa = (media * 100) / qntdAtual;
+            if (porcentagemRelativa <= 30.0) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    public Integer retornarQuantidadeProdutosSemEstoque (Integer idEmpresa) {
+        List<ProdutoConsultaDto> produtos =  produtoService.listarPorEmpresaId(idEmpresa);
+        Integer contador = 0;
+
+        for (ProdutoConsultaDto produto : produtos) {
+            Integer qntdAtual = retornarQuantidadeTodasValidadesProduto(produto.getId());
+            if (qntdAtual == 0) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    public Integer retornarQuantidadeProdutosRepostosDia(Integer idEmpresa, LocalDate data) {
+        LocalDateTime dataInicio = data.atStartOfDay();
+        LocalDateTime dataFim = dataInicio.plusHours(23).plusMinutes(59).plusSeconds(59);
+        Integer contador = movimentacaoValidadeRepository.findReposicaoByData(idEmpresa, dataInicio, dataFim);
+        return contador;
+    }
+
+    /*
+     * ESTOQUE ALTO
+     * SEM ESTOQUE
+     * RESPOSTOS NO DIA
+     * ESTOQUE BAIXO -> CONSIDERAR MÉDIA DE VALORES, CERCA DE 25% DESSA MÉDIA
+     * ALERTA PARA VALIDADES PROXIMAS
+     * AUTOMATICAMENTE DESATIVAR DATAS VENCIDAS
+     * */
 }

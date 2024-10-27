@@ -37,6 +37,7 @@ public class AgendamentoMapper {
         dto.setNomeServico(agendamentoEntity.getServicoPreco().getServico().getNome());
         dto.setStatus(agendamentoEntity.getBitStatus());
         dto.setPreco(agendamentoEntity.getServicoPreco().getPreco());
+        dto.setComissao(agendamentoEntity.getServicoPreco().getComissao());
         dto.setDuracaoServico(agendamentoEntity.getServicoPreco().getDuracao());
         dto.setMetodoPagamento(agendamentoEntity.getMetodoPagamento());
         dto.setValorServico(agendamentoEntity.getServicoPreco().getPreco());

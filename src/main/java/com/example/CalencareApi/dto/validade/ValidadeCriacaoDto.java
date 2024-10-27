@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class ValidadeCriacaoDto {
     String descricao;
-    @NotNull @FutureOrPresent
+    @FutureOrPresent
     LocalDateTime dtValidade;
     @NotNull
     LocalDateTime dtCriacao;

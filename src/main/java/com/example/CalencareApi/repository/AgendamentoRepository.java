@@ -128,4 +128,16 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
     List<Agendamento> getHistoricoAgendamentosMes(@Param("empresaId") Integer empresaId,
                                                @Param("dataInicio") LocalDateTime dataInicio,
                                                @Param("dataFim") LocalDateTime dataFim);
+
+    //Somar a receita diária agrupada por dia
+    @Query("SELECT new map(CAST(a.dtHora AS date) as data, " +
+            "SUM(a.servicoPreco.preco) as total) " +
+            "FROM Agendamento a " +
+            "WHERE a.funcionario.empresa.id = :empresaId " +
+            "AND a.dtHora BETWEEN :dataInicio AND :dataFim " +
+            "AND a.bitStatus = 5 " +
+            "GROUP BY CAST(a.dtHora AS date)")
+    List<Map<String, Object>> getReceitaDiaria(@Param("empresaId") Integer empresaId,
+                                               @Param("dataInicio") LocalDateTime dataInicio,
+                                               @Param("dataFim") LocalDateTime dataFim);
 }
