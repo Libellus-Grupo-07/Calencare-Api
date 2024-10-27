@@ -88,10 +88,6 @@ public class MovimentacaoValidadeService {
             return null;
         }
         List<MovimentacaoValidade> movimentacaoValidade = movimentacaoValidadeRepository.findByValidadeId(idValidade);
-        if (movimentacaoValidade == null) {
-            return null;
-        }
-
         return MovimentacaoValidadeMapper.toDto(movimentacaoValidade);
     }
 
@@ -157,10 +153,10 @@ public class MovimentacaoValidadeService {
     }
 
     /*
-     * ESTOQUE ALTO
-     * SEM ESTOQUE
-     * RESPOSTOS NO DIA
-     * ESTOQUE BAIXO -> CONSIDERAR MÉDIA DE VALORES, CERCA DE 25% DESSA MÉDIA
+     * ESTOQUE ALTO OK
+     * SEM ESTOQUE OK
+     * RESPOSTOS NO DIA OK
+     * ESTOQUE BAIXO -> CONSIDERAR MÉDIA DE VALORES, CERCA DE 25% DESSA MÉDIA OK
      * ALERTA PARA VALIDADES PROXIMAS
      * AUTOMATICAMENTE DESATIVAR DATAS VENCIDAS
      * */

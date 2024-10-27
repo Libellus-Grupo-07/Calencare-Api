@@ -174,9 +174,6 @@ public class DespesaService {
         LocalDateTime dataInicioTransformada = LocalDateTime.of(data.getYear(), data.getMonth(), data.getDayOfMonth(), 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusDays(1).minusSeconds(1);
         List<Despesa> despesas = despesaRepository.encontrarDespesasPeriodo(empresaId, dataInicioTransformada, dataFimTransformada);
-        if (despesas.isEmpty()) {
-            return null;
-        }
         return DespesaMapper.toDto(despesas);
     }
 
@@ -184,9 +181,6 @@ public class DespesaService {
         LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
         List<Despesa> despesas = despesaRepository.encontrarDespesasPeriodo(empresaId, dataInicioTransformada, dataFimTransformada);
-        if (despesas.isEmpty()) {
-            return null;
-        }
         return DespesaMapper.toDto(despesas);
     }
 
