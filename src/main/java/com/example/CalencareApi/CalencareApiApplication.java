@@ -29,8 +29,9 @@ public class CalencareApiApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://44.198.165.164", "http://localhost:3000")
-						.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+						.allowedOrigins("http://54.243.135.89:80")
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+						.allowedHeaders("*");
 			}
 		};
 	}
