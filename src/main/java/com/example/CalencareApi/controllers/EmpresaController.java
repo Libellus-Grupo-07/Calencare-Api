@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,6 +36,15 @@ public class EmpresaController {
 
         EmpresaConsultaDto empresaCadastrada = this.service.cadastrarEmpresa(empresaDto);
         return ResponseEntity.status(201).body(empresaCadastrada);
+    }
+
+    @GetMapping("/cor")
+    public ResponseEntity<List<String>> buscarEmpresasPorCor() {
+        List<String> cores = new ArrayList<>();
+        cores.add("#1aa35f");
+        cores.add("rgba(53, 240, 69, 0.15)");
+        cores.add("#58ea64");
+        return ResponseEntity.status(200).body(cores);
     }
 
     @GetMapping("/{id}")
