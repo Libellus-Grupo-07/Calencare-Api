@@ -2,10 +2,14 @@ package com.example.CalencareApi.service;
 import com.example.CalencareApi.dto.produto.ProdutoConsultaDto;
 import com.example.CalencareApi.dto.validade.movimentacao.MovimentacaoValidadeConsultaDto;
 import com.example.CalencareApi.dto.validade.movimentacao.MovimentacaoValidadeCriacaoDto;
+import com.example.CalencareApi.entity.Empresa;
 import com.example.CalencareApi.entity.MovimentacaoValidade;
+import com.example.CalencareApi.entity.Produto;
 import com.example.CalencareApi.entity.Validade;
 import com.example.CalencareApi.mapper.MovimentacaoValidadeMapper;
+import com.example.CalencareApi.mapper.ProdutoMapper;
 import com.example.CalencareApi.repository.MovimentacaoValidadeRepository;
+import com.example.CalencareApi.repository.ProdutoRepository;
 import com.example.CalencareApi.repository.ValidadeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +26,9 @@ public class MovimentacaoValidadeService {
 
     @Autowired MovimentacaoValidadeRepository movimentacaoValidadeRepository;
     @Autowired ValidadeRepository validadeRepository;
+    @Autowired ProdutoRepository produtoRepository;
     @Autowired ProdutoService produtoService;
+    @Autowired EmpresaService empresaService;
 
     public MovimentacaoValidadeConsultaDto cadastrar(MovimentacaoValidadeCriacaoDto dto) {
         Validade validade = validadeRepository.findById(dto.getIdValidade()).orElseThrow();
@@ -62,7 +68,7 @@ public class MovimentacaoValidadeService {
         return quantidade;
     }
 
-    public Integer retornarQuantidadeTodasValidadesProduto (Integer idProduto) {
+    public Integer retornarQuantidadeTotalProduto(Integer idProduto) {
         List<Validade> validades = validadeRepository.findByProdutoId(idProduto);
         if (validades == null) {
             return null;
@@ -91,6 +97,47 @@ public class MovimentacaoValidadeService {
         return MovimentacaoValidadeMapper.toDto(movimentacaoValidade);
     }
 
+    // PRODUTO
+    public ProdutoConsultaDto buscarPorIdPorEmpresa(Integer id, Integer idEmpresa) {
+        Produto produto = this.produtoRepository.findByIdAndEmpresaId(id, idEmpresa);
+        Empresa empresa = empresaService.buscarEntidadePorId(idEmpresa);
+        if (produto == null) {
+            return null;
+        }
+        if (!produto.getEmpresa().equals(empresa)) {
+            return null;
+        }
+        ProdutoConsultaDto produtoConsultaDto = ProdutoMapper.toDto(produto);
+        produtoConsultaDto.setQntdTotalEstoque(retornarQuantidadeTotalProduto(id));
+        return produtoConsultaDto;
+    }
+
+    public ProdutoConsultaDto buscarProdutoPorId(Integer id) {
+        ProdutoConsultaDto produto = ProdutoMapper.toDto(produtoRepository.findById(id).orElse(null));
+        if (produto == null) {
+            return null;
+        }
+        Integer qntd = retornarQuantidadeTotalProduto(id);
+        produto.setQntdTotalEstoque(qntd);
+        return produto;
+    }
+
+    public List<ProdutoConsultaDto> buscarPorNomeOuMarca(Integer idEmpresa, String nome) {
+        List<ProdutoConsultaDto> produtos = ProdutoMapper.toDto(this.produtoRepository.findByNomeOrMarca(idEmpresa, nome));
+        for (ProdutoConsultaDto produto : produtos) {
+            produto.setQntdTotalEstoque(retornarQuantidadeTotalProduto(produto.getId()));
+        }
+        return produtos;
+    }
+
+    public List<ProdutoConsultaDto> listarPorEmpresaId(Integer idEmpresa) {
+        List<ProdutoConsultaDto> produtos = ProdutoMapper.toDto(this.produtoRepository.findAllByEmpresaId(idEmpresa));
+        for (ProdutoConsultaDto produto : produtos) {
+            produto.setQntdTotalEstoque(retornarQuantidadeTotalProduto(produto.getId()));
+        }
+        return produtos;
+    }
+
     // KPIS
     /*public Double retornarMediaEstoqueProduto(Integer idProduto) {
         return movimentacaoValidadeRepository.findAverageByProdutoId(idProduto);
@@ -107,7 +154,7 @@ public class MovimentacaoValidadeService {
         for (Map<String,Object> mediaProduto : mediaProdutos) {
             Integer idProduto = (Integer) mediaProduto.get("id_prod");
             Double media = (Double) mediaProduto.get("qntd");
-            Integer qntdAtual = retornarQuantidadeTodasValidadesProduto(idProduto);
+            Integer qntdAtual = retornarQuantidadeTotalProduto(idProduto);
             Double porcentagemRelativa = (media * 100) / qntdAtual;
             if (porcentagemRelativa > 30.0) {
                 contador++;
@@ -123,7 +170,7 @@ public class MovimentacaoValidadeService {
         for (Map<String,Object> mediaProduto : mediaProdutos) {
             Integer idProduto = (Integer) mediaProduto.get("id_prod");
             Double media = (Double) mediaProduto.get("qntd");
-            Integer qntdAtual = retornarQuantidadeTodasValidadesProduto(idProduto);
+            Integer qntdAtual = retornarQuantidadeTotalProduto(idProduto);
             Double porcentagemRelativa = (media * 100) / qntdAtual;
             if (porcentagemRelativa <= 30.0) {
                 contador++;
@@ -133,11 +180,11 @@ public class MovimentacaoValidadeService {
     }
 
     public Integer retornarQuantidadeProdutosSemEstoque (Integer idEmpresa) {
-        List<ProdutoConsultaDto> produtos =  produtoService.listarPorEmpresaId(idEmpresa);
+        List<ProdutoConsultaDto> produtos =  listarPorEmpresaId(idEmpresa);
         Integer contador = 0;
 
         for (ProdutoConsultaDto produto : produtos) {
-            Integer qntdAtual = retornarQuantidadeTodasValidadesProduto(produto.getId());
+            Integer qntdAtual = retornarQuantidadeTotalProduto(produto.getId());
             if (qntdAtual == 0) {
                 contador++;
             }

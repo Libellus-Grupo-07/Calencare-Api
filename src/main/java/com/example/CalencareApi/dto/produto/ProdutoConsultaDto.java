@@ -13,5 +13,6 @@ public class ProdutoConsultaDto {
     private String marca;
     private Integer categoriaProdutoId;
     private String categoriaProdutoNome;
+    private Integer qntdTotalEstoque;
     private Integer empresaId;
 }
