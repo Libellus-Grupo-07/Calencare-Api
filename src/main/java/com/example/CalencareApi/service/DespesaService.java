@@ -3,6 +3,7 @@ package com.example.CalencareApi.service;
 import com.example.CalencareApi.dto.despesa.DespesaAtualizarDto;
 import com.example.CalencareApi.dto.despesa.DespesaConsultaDto;
 import com.example.CalencareApi.dto.despesa.DespesaCriacaoDto;
+import com.example.CalencareApi.dto.despesa.DespesaDashSemanaValorDto;
 import com.example.CalencareApi.entity.CategoriaDespesa;
 import com.example.CalencareApi.entity.Despesa;
 import com.example.CalencareApi.entity.Empresa;
@@ -10,6 +11,8 @@ import com.example.CalencareApi.mapper.DespesaMapper;
 import com.example.CalencareApi.repository.CategoriaDespesaRepository;
 import com.example.CalencareApi.repository.DespesaRepository;
 import com.example.CalencareApi.repository.EmpresaRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
@@ -192,5 +195,12 @@ public class DespesaService {
 
     public Boolean existePorId(Integer id) {
         return this.despesaRepository.existsById(id);
+    }
+
+    //dashboard
+    public List<Map<String, Object>> getTotalDespesasPorSemana(Integer empresaId, Month mes, Year ano) {
+        LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
+        LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
+        return despesaRepository.getTotalDespesasPorSemana(empresaId, dataInicioTransformada, dataFimTransformada);
     }
 }

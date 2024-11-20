@@ -3,6 +3,7 @@ package com.example.CalencareApi.controllers;
 import com.example.CalencareApi.dto.despesa.DespesaAtualizarDto;
 import com.example.CalencareApi.dto.despesa.DespesaConsultaDto;
 import com.example.CalencareApi.dto.despesa.DespesaCriacaoDto;
+import com.example.CalencareApi.dto.despesa.DespesaDashSemanaValorDto;
 import com.example.CalencareApi.service.DespesaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -120,5 +121,4 @@ public class DespesaController {
         }
         return ResponseEntity.ok(despesas);
     }
-
 }
