@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface DespesaRepository extends JpaRepository<Despesa, Integer> {
     Boolean existsDespesaByNome(String nome);
 
+    @Query("SELECT d FROM Despesa d WHERE d.empresa.id = :id ORDER BY d.dtPagamento DESC")
     List<Despesa> findByEmpresaId (Integer id);
 
     @Query("SELECT d FROM Despesa d WHERE d.empresa.id = :id AND d.bitStatus = 1 AND d.dtPagamento BETWEEN :dataInicio AND :dataFim")

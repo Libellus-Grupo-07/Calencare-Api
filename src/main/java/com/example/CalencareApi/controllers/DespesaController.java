@@ -35,6 +35,15 @@ public class DespesaController {
         return ResponseEntity.ok(savedDto);
     }
 
+    @GetMapping("/{idEmpresa}")
+    public ResponseEntity<List<DespesaConsultaDto>> listar(@PathVariable Integer idEmpresa) {
+        List<DespesaConsultaDto> despesas = service.listarPorEmpresaId(idEmpresa);
+        if (despesas.isEmpty()) {
+            return ResponseEntity.status(204).build();
+        }
+        return ResponseEntity.ok(despesas);
+    }
+
     @GetMapping("/{idEmpresa}/{id}")
     public ResponseEntity<DespesaConsultaDto> buscarPorId(@PathVariable Integer idEmpresa,
                                                           @PathVariable Integer id) {

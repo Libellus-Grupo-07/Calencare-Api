@@ -100,6 +100,7 @@ public class DespesaService {
                 despesaDto.getDtPagamento() == null ? despesaAtualizacao.getDtPagamento() : despesaDto.getDtPagamento());
         despesaAtualizacao.setBitStatus(
                 despesaDto.getBitStatus() == null ? despesaAtualizacao.getBitStatus() : despesaDto.getBitStatus());
+        despesaAtualizacao.setCategoriaDespesa(categoriaDespesa);
 
         return DespesaMapper.toDto(despesaRepository.save(despesaAtualizacao));
     }
@@ -189,12 +190,5 @@ public class DespesaService {
 
     public Boolean existePorId(Integer id) {
         return this.despesaRepository.existsById(id);
-    }
-
-    //dashboard
-    public List<Map<String, Object>> getTotalDespesasPorSemana(Integer empresaId, Month mes, Year ano) {
-        LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
-        LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
-        return despesaRepository.getTotalDespesasPorSemana(empresaId, dataInicioTransformada, dataFimTransformada);
     }
 }

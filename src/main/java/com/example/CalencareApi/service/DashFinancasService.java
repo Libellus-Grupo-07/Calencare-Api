@@ -22,7 +22,7 @@ public class DashFinancasService {
         LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
         String sql = """
-                SELECT WEEKOFYEAR(DATE(d.dt_pagamento)) AS semana, SUM(d.valor) AS valor FROM DESPESA d
+                SELECT WEEKOFYEAR(DATE(d.dt_pagamento)) AS semana, SUM(d.valor) AS valor FROM despesa d
                     INNER JOIN empresa e ON e.id = d.empresa_id
                     WHERE e.id = :empresaId
                     AND DATE(d.dt_pagamento) BETWEEN :dataInicio AND :dataFim
