@@ -1,17 +1,15 @@
 package com.example.CalencareApi.service;
 
-import com.example.CalencareApi.dto.agendamento.AgendamentoDashSemanaValorDto;
-import com.example.CalencareApi.dto.despesa.DespesaDashSemanaValorDto;
+import com.example.CalencareApi.dto.DashSemanaValorDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -20,23 +18,20 @@ public class DashFinancasService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<DespesaDashSemanaValorDto> getDespesaSemanal(Integer empresaId, Month mes, Year ano) {
+    public List<DashSemanaValorDto> getDespesaSemanal(Integer empresaId, Month mes, Year ano) {
         LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
         String sql = """
-                SELECT WEEKOFYEAR(DATE(d.dt_pagamento)) AS semana,
-                    SUM(d.valor) AS valor
-                    FROM DESPESA d
+                SELECT WEEKOFYEAR(DATE(d.dt_pagamento)) AS semana, SUM(d.valor) AS valor FROM DESPESA d
                     INNER JOIN empresa e ON e.id = d.empresa_id
                     WHERE e.id = :empresaId
                     AND DATE(d.dt_pagamento) BETWEEN :dataInicio AND :dataFim
                     AND d.bit_status = 1
                     GROUP BY WEEKOFYEAR(DATE(d.dt_pagamento))
-                    ORDER BY semana";
+                    ORDER BY semana;
                 """;
 
-        // Execute the native query and map the results
-        List<DespesaDashSemanaValorDto> result = entityManager.createNativeQuery(sql, "DespesaDashSemanaValorDtoMapping")
+        List<DashSemanaValorDto> result = entityManager.createNativeQuery(sql, "DespesaDashSemanaValorDtoMapping")
                 .setParameter("empresaId", empresaId)
                 .setParameter("dataInicio", dataInicioTransformada)
                 .setParameter("dataFim", dataFimTransformada)
@@ -45,7 +40,7 @@ public class DashFinancasService {
         return result;
     }
 
-    public List<AgendamentoDashSemanaValorDto> getAgendamentoValorSemanal(Integer empresaId, Month mes, Year ano) {
+    public List<DashSemanaValorDto> getAgendamentoValorSemanal(Integer empresaId, Month mes, Year ano) {
         LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
         String sql = """
@@ -59,8 +54,7 @@ public class DashFinancasService {
                     ORDER BY semana
                 """;
 
-        // Execute the native query and map the results
-        List<AgendamentoDashSemanaValorDto> result = entityManager.createNativeQuery(sql, "AgendamentoDashSemanaValorDtoMapping")
+        List<DashSemanaValorDto> result = entityManager.createNativeQuery(sql, "AgendamentoDashSemanaValorDtoMapping")
                 .setParameter("empresaId", empresaId)
                 .setParameter("dataInicio", dataInicioTransformada)
                 .setParameter("dataFim", dataFimTransformada)
@@ -69,12 +63,12 @@ public class DashFinancasService {
         return result;
     }
 
-    public List<AgendamentoDashSemanaValorDto> getAgendamentoLucroSemanal(Integer empresaId, Month mes, Year ano) {
+    public List<DashSemanaValorDto> getAgendamentoLucroSemanal(Integer empresaId, Month mes, Year ano) {
         LocalDateTime dataInicioTransformada = LocalDateTime.of(ano.getValue(), mes.getValue(), 1, 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
 
         String sql = """
-                SELECT TRUNCATE(SUM(sp.preco * sp.comissao), 2) valor, WEEKOFYEAR(DATE(a.dt_hora)) semana FROM agendamento
+                SELECT TRUNCATE(SUM(sp.preco * sp.comissao), 2) valor, WEEKOFYEAR(DATE(a.dt_hora)) semana FROM agendamento a
                     INNER JOIN servico_preco sp ON sp.id = a.servico_preco_id
                     INNER JOIN empresa e ON e.id = sp.empresa_id
                     WHERE e.id = :empresaId
@@ -84,8 +78,7 @@ public class DashFinancasService {
                     ORDER BY semana
                 """;
 
-        // Execute the native query and map the results
-        List<AgendamentoDashSemanaValorDto> result = entityManager.createNativeQuery(sql, "AgendamentoDashSemanaValorDtoMapping")
+        List<DashSemanaValorDto> result = entityManager.createNativeQuery(sql, "AgendamentoDashSemanaValorDtoMapping")
                 .setParameter("empresaId", empresaId)
                 .setParameter("dataInicio", dataInicioTransformada)
                 .setParameter("dataFim", dataFimTransformada)
@@ -95,9 +88,7 @@ public class DashFinancasService {
     }
 
     public List<Integer> buscarSemanasDoMes(Integer mes, Integer ano) {
-        //LocalDate instance= LocalDate.now();
         List<Integer> semanas = new ArrayList<>();
-
         LocalDateTime dataInicioTransformada = LocalDateTime.of(ano, mes, 1, 0, 0);
         LocalDateTime dataFimTransformada = dataInicioTransformada.plusMonths(1).minusSeconds(1);
         LocalDateTime data = dataInicioTransformada;
@@ -110,12 +101,55 @@ public class DashFinancasService {
         return semanas;
     }
 
-    /*public Object[][] getDadosDashboard (Integer empresaId, Month mes, Year ano) {
-        List<AgendamentoDashSemanaValorDto> agendamentosReceita = getAgendamentoValorSemanal(empresaId, mes, ano);
-        List<AgendamentoDashSemanaValorDto> agendamentosLucro = getAgendamentoLucroSemanal(empresaId, mes, ano);
-        List<DespesaDashSemanaValorDto> despesas = getDespesaSemanal(empresaId, mes, ano);
+    public void validarDadosDash (List<DashSemanaValorDto> lista, List<Integer> semanas) {
+        if (lista.isEmpty()) {
+            for (int i = 0; i < semanas.size(); i++) {
+                Integer semanaAtual = semanas.get(i);
+                DashSemanaValorDto dashSemanaValorDto = new DashSemanaValorDto();
+                dashSemanaValorDto.setSemana(semanaAtual);
+                dashSemanaValorDto.setValor(0.0);
+                lista.add(dashSemanaValorDto);
+            }
+        } else {
+            if (lista.size() != semanas.size()) {
+                for (int i = 0; i < semanas.size(); i++) {
+                    Integer semanaAtual = semanas.get(i);
+                    Boolean isEncontrado = false;
+                    for (int j = 0; j < lista.size(); j++) {
+                        if (semanaAtual == lista.get(j).getSemana()) {
+                            isEncontrado = true;
+                            break;
+                        }
+                    }
+                    if (!isEncontrado) {
+                        DashSemanaValorDto dashSemanaValorDto = new DashSemanaValorDto();
+                        dashSemanaValorDto.setSemana(semanaAtual);
+                        dashSemanaValorDto.setValor(0.0);
+                        lista.add(dashSemanaValorDto);
+                    }
+                }
+                lista.sort(Comparator.comparing(DashSemanaValorDto::getSemana));
+            }
+        }
+    }
 
+    public DashSemanaValorDto[][] getDadosDashboard (Integer empresaId, Month mes, Year ano) {
+        List<DashSemanaValorDto> agendamentosReceita = getAgendamentoValorSemanal(empresaId, mes, ano);
+        List<DashSemanaValorDto> agendamentosLucro = getAgendamentoLucroSemanal(empresaId, mes, ano);
+        List<DashSemanaValorDto> despesas = getDespesaSemanal(empresaId, mes, ano);
+        List<Integer> semanas = buscarSemanasDoMes(mes.getValue(), ano.getValue());
+        DashSemanaValorDto[][] result = new DashSemanaValorDto[3][semanas.size()];
+
+        validarDadosDash(agendamentosReceita, semanas);
+        validarDadosDash(agendamentosLucro, semanas);
+        validarDadosDash(despesas, semanas);
+
+        for (int i = 0; i < semanas.size(); i++) {
+            result[0][i] = agendamentosReceita.get(i);
+            result[1][i] = agendamentosLucro.get(i);
+            result[2][i] = despesas.get(i);
+        }
 
         return result;
-    }*/
+    }
 }

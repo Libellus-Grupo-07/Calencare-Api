@@ -3,14 +3,12 @@ package com.example.CalencareApi.controllers;
 import com.example.CalencareApi.dto.despesa.DespesaAtualizarDto;
 import com.example.CalencareApi.dto.despesa.DespesaConsultaDto;
 import com.example.CalencareApi.dto.despesa.DespesaCriacaoDto;
-import com.example.CalencareApi.dto.despesa.DespesaDashSemanaValorDto;
 import com.example.CalencareApi.service.DespesaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;

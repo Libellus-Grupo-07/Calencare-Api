@@ -1,7 +1,6 @@
 package com.example.CalencareApi.entity;
 
-import com.example.CalencareApi.dto.agendamento.AgendamentoDashSemanaValorDto;
-import com.example.CalencareApi.dto.despesa.DespesaDashSemanaValorDto;
+import com.example.CalencareApi.dto.DashSemanaValorDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import java.util.Date;
 @SqlResultSetMapping(
         name = "AgendamentoDashSemanaValorDtoMapping",
         classes = @ConstructorResult(
-                targetClass = AgendamentoDashSemanaValorDto.class,
+                targetClass = DashSemanaValorDto.class,
                 columns = {
                         @ColumnResult(name = "semana", type = Integer.class),
                         @ColumnResult(name = "valor", type = Double.class)

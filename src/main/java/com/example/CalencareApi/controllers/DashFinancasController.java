@@ -1,7 +1,6 @@
 package com.example.CalencareApi.controllers;
 
-import com.example.CalencareApi.dto.agendamento.AgendamentoDashSemanaValorDto;
-import com.example.CalencareApi.dto.despesa.DespesaDashSemanaValorDto;
+import com.example.CalencareApi.dto.DashSemanaValorDto;
 import com.example.CalencareApi.service.DashFinancasService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +24,11 @@ public class DashFinancasController {
 
     // testando dados para dash
     @GetMapping("/semana/despesa/{idEmpresa}/{ano}/{mes}")
-    public ResponseEntity<List<DespesaDashSemanaValorDto>> getTotalDespesasPorSemana(
+    public ResponseEntity<List<DashSemanaValorDto>> getTotalDespesasPorSemana(
             @PathVariable Integer idEmpresa,
             @PathVariable Integer ano,
             @PathVariable Integer mes) {
-        List<DespesaDashSemanaValorDto> despesas = service.getDespesaSemanal(idEmpresa, Month.of(mes), Year.of(ano));
+        List<DashSemanaValorDto> despesas = service.getDespesaSemanal(idEmpresa, Month.of(mes), Year.of(ano));
         if (despesas.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -37,11 +36,11 @@ public class DashFinancasController {
     }
 
     @GetMapping("/semana/agendamentos-receita/{idEmpresa}/{ano}/{mes}")
-    public ResponseEntity<List<AgendamentoDashSemanaValorDto>> getTotalAgendamentoReceitaPorSemana(
+    public ResponseEntity<List<DashSemanaValorDto>> getTotalAgendamentoReceitaPorSemana(
             @PathVariable Integer idEmpresa,
             @PathVariable Integer ano,
             @PathVariable Integer mes) {
-        List<AgendamentoDashSemanaValorDto> despesas = service.getAgendamentoValorSemanal(idEmpresa, Month.of(mes), Year.of(ano));
+        List<DashSemanaValorDto> despesas = service.getAgendamentoValorSemanal(idEmpresa, Month.of(mes), Year.of(ano));
         if (despesas.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -49,11 +48,11 @@ public class DashFinancasController {
     }
 
     @GetMapping("/semana/agendamentos-lucro/{idEmpresa}/{ano}/{mes}")
-    public ResponseEntity<List<AgendamentoDashSemanaValorDto>> getTotalAgendamentoLucroPorSemana(
+    public ResponseEntity<List<DashSemanaValorDto>> getTotalAgendamentoLucroPorSemana(
             @PathVariable Integer idEmpresa,
             @PathVariable Integer ano,
             @PathVariable Integer mes) {
-        List<AgendamentoDashSemanaValorDto> despesas = service.getAgendamentoLucroSemanal(idEmpresa, Month.of(mes), Year.of(ano));
+        List<DashSemanaValorDto> despesas = service.getAgendamentoLucroSemanal(idEmpresa, Month.of(mes), Year.of(ano));
         if (despesas.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
@@ -68,6 +67,15 @@ public class DashFinancasController {
         if (despesas.isEmpty()) {
             return ResponseEntity.status(204).build();
         }
+        return ResponseEntity.ok(despesas);
+    }
+
+    @GetMapping("/dash/{empresa}/{ano}/{mes}")
+    public ResponseEntity<DashSemanaValorDto[][]> getDash(
+            @PathVariable Integer empresa,
+            @PathVariable Integer ano,
+            @PathVariable Integer mes) {
+        DashSemanaValorDto[][] despesas = service.getDadosDashboard(empresa, Month.of(mes), Year.of(ano));
         return ResponseEntity.ok(despesas);
     }
 }

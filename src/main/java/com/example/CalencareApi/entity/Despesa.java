@@ -1,10 +1,9 @@
 package com.example.CalencareApi.entity;
 
-import com.example.CalencareApi.dto.despesa.DespesaDashSemanaValorDto;
+import com.example.CalencareApi.dto.DashSemanaValorDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @SqlResultSetMapping(
         name = "DespesaDashSemanaValorDtoMapping",
         classes = @ConstructorResult(
-                targetClass = DespesaDashSemanaValorDto.class,
+                targetClass = DashSemanaValorDto.class,
                 columns = {
                         @ColumnResult(name = "semana", type = Integer.class),
                         @ColumnResult(name = "valor", type = Double.class)
