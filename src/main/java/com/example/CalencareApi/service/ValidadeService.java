@@ -17,8 +17,7 @@ import java.util.List;
 public class ValidadeService {
 
     @Autowired ValidadeRepository validadeRepository;
-    @Autowired
-    MovimentacaoValidadeRepository movimentacaoValidadeRepository;
+    @Autowired MovimentacaoValidadeRepository movimentacaoValidadeRepository;
     @Autowired ProdutoRepository produtoRepository;
 
     public ValidadeConsultaDto cadastrar(ValidadeCriacaoDto validadeCriacaoDto) {

@@ -30,6 +30,9 @@ public class Agendamento {
     private LocalDateTime dtHora;
     private LocalDate dia;
     private LocalTime horario;
+    private Double preco;
+    private Double comissao;
+    private Integer duracao;
     private Integer bitStatus;
     private String metodoPagamento;
     @ManyToOne

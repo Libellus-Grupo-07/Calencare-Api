@@ -44,4 +44,8 @@ public interface DespesaRepository extends JpaRepository<Despesa, Integer> {
     List<Map<String, Object>> getTotalDespesasPorSemana(@Param("empresaId") Integer empresaId,
                                                         @Param("dataInicio") LocalDateTime dataInicio,
                                                         @Param("dataFim") LocalDateTime dataFim);
+
+    // Lista de despesas do dia
+    @Query("SELECT d FROM Despesa d WHERE d.empresa.id = :empresaId AND CAST(d.dtPagamento AS date) = :data AND d.bitStatus = 1 ORDER BY d.dtCriacao")
+    List<Despesa> getDespesasDia(@Param("empresaId") Integer empresaId, @Param("data") LocalDate data);
 }

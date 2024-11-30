@@ -1,5 +1,6 @@
 package com.example.CalencareApi.controllers;
 
+import com.example.CalencareApi.dto.produto.ProdutoConsultaDto;
 import com.example.CalencareApi.dto.validade.movimentacao.MovimentacaoValidadeConsultaDto;
 import com.example.CalencareApi.dto.validade.movimentacao.MovimentacaoValidadeCriacaoDto;
 import com.example.CalencareApi.service.MovimentacaoValidadeService;
@@ -77,6 +78,11 @@ public class MovimentacaoValidadeController {
         return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosBaixa(idEmpresa));
     }
 
+    @GetMapping("/kpi/estoque-muito-baixo/{idEmpresa}")
+    public ResponseEntity<Integer> retornarQuantidadeProdutosMuitoBaixa(@PathVariable Integer idEmpresa) {
+        return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosMuitoBaixa(idEmpresa));
+    }
+
     @GetMapping("/kpi/sem-estoque/{idEmpresa}")
     public ResponseEntity<Integer> retornarQuantidadeProdutosSemEstoque(@PathVariable Integer idEmpresa) {
         return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosSemEstoque(idEmpresa));
@@ -87,6 +93,15 @@ public class MovimentacaoValidadeController {
             @PathVariable Integer idEmpresa,
             @PathVariable LocalDate data) {
         return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosRepostosDia(idEmpresa, data));
+    }
+
+    @GetMapping("/listar-movimentacoes-produto/{idProduto}")
+    public ResponseEntity<List<MovimentacaoValidadeConsultaDto>> listarMovimentacoesProduto(@PathVariable Integer idProduto) {
+        List<MovimentacaoValidadeConsultaDto> movimentacoes = movimentacaoValidadeService.listarMovimentacoesProduto(idProduto);
+        if (movimentacoes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(movimentacoes);
     }
 
 }

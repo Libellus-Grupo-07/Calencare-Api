@@ -98,14 +98,14 @@ public class DespesaController {
         return ResponseEntity.ok(despesas);
     }
 
-    @GetMapping("/total/{idEmpresa}/{mes}/{ano}")
+    /*@GetMapping("/total/{idEmpresa}/{mes}/{ano}")
     public ResponseEntity<Double> calcularDespesaTotalMes(
             @PathVariable Integer idEmpresa,
             @PathVariable Integer mes,
             @PathVariable Integer ano) {
         Double total = service.calcularDespesaTotalMes(idEmpresa, Month.of(mes), Year.of(ano));
         return ResponseEntity.ok(total);
-    }
+    }*/
 
     @GetMapping("/total/{idEmpresa}/{data}")
     public ResponseEntity<Double> calcularDespesaTotalDia(

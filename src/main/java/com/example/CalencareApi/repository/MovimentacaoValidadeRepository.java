@@ -18,7 +18,7 @@ public interface MovimentacaoValidadeRepository extends JpaRepository<Movimentac
     @Query("UPDATE MovimentacaoValidade mv SET mv.bitStatus = 0 WHERE mv.validade.id = :id")
     void deleteByValidadeId(Integer id);
 
-    @Query("SELECT mv FROM MovimentacaoValidade mv WHERE mv.validade.id = :id AND mv.bitStatus = 1 ORDER BY mv.dtCriacao DESC")
+    @Query("SELECT mv FROM MovimentacaoValidade mv WHERE mv.validade.id = :id ORDER BY mv.dtCriacao DESC")
     List<MovimentacaoValidade> findByValidadeId(Integer id);
 
     @Query("SELECT mv FROM MovimentacaoValidade mv WHERE mv.id = :id AND mv.bitStatus = 1")
