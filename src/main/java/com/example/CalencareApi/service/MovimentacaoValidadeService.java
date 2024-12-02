@@ -1,18 +1,21 @@
 package com.example.CalencareApi.service;
+import com.example.CalencareApi.dto.empresa.EmpresaConsultaDto;
+import com.example.CalencareApi.dto.funcionario.FuncionarioConsultaDto;
 import com.example.CalencareApi.dto.produto.ProdutoConsultaDto;
 import com.example.CalencareApi.dto.validade.movimentacao.MovimentacaoValidadeConsultaDto;
 import com.example.CalencareApi.dto.validade.movimentacao.MovimentacaoValidadeCriacaoDto;
-import com.example.CalencareApi.entity.Empresa;
-import com.example.CalencareApi.entity.MovimentacaoValidade;
-import com.example.CalencareApi.entity.Produto;
-import com.example.CalencareApi.entity.Validade;
+import com.example.CalencareApi.entity.*;
 import com.example.CalencareApi.mapper.MovimentacaoValidadeMapper;
 import com.example.CalencareApi.mapper.ProdutoMapper;
+import com.example.CalencareApi.repository.FuncionarioRepository;
 import com.example.CalencareApi.repository.MovimentacaoValidadeRepository;
 import com.example.CalencareApi.repository.ProdutoRepository;
 import com.example.CalencareApi.repository.ValidadeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,6 +34,8 @@ public class MovimentacaoValidadeService {
     @Autowired ProdutoService produtoService;
     @Autowired EmpresaService empresaService;
     @Autowired NotificacaoEstoqueService notificacaoEstoqueService;
+    @Autowired FuncionarioService funcionarioService;
+    @Autowired EmailService emailService;
 
     public MovimentacaoValidadeConsultaDto cadastrar(MovimentacaoValidadeCriacaoDto dto) {
         Validade validade = validadeRepository.findById(dto.getIdValidade()).orElseThrow();
@@ -326,10 +331,11 @@ public class MovimentacaoValidadeService {
             Double porcentagemRelativa = (qntdAtual * 100) / media;
 
             if (porcentagemRelativa > 15.0 && porcentagemRelativa <= 30.0) {
+                String descricao = "Estoque baixo";
                 ProdutoConsultaDto produto = buscarProdutoPorId(idProduto);
                 produto.setQntdTotalEstoque(qntdAtual);
+                produto.setNivelEstoque(descricao);
                 produtosBaixo.add(produto);
-                String descricao = "Estoque baixo";
                 notificacaoEstoqueService.cadastrar(produto, descricao);
             }
         }
@@ -357,10 +363,11 @@ public class MovimentacaoValidadeService {
             Integer qntdAtual = retornarQuantidadeTotalProduto(idProduto);
             Double porcentagemRelativa = (qntdAtual * 100) / media;
 
-            if (porcentagemRelativa <= 15.0 && porcentagemRelativa > 0) {
-                ProdutoConsultaDto produto = buscarProdutoPorId(idProduto);
-                produtosMuitoBaixo.add(produto);
+            if (porcentagemRelativa > 0.0 && porcentagemRelativa <= 15.0) {
                 String descricao = "Quase sem estoque";
+                ProdutoConsultaDto produto = buscarProdutoPorId(idProduto);
+                produto.setNivelEstoque(descricao);
+                produtosMuitoBaixo.add(produto);
                 notificacaoEstoqueService.cadastrar(produto, descricao);
             }
         }
@@ -413,6 +420,32 @@ public class MovimentacaoValidadeService {
             }
         }
         return movimentacoes;
+    }
+
+    @Async
+    @Scheduled(fixedDelay = 1000 * 180 * 1)
+    @Transactional
+    public void enviarEmailSituacaoEstoque() {
+        List<EmpresaConsultaDto> empresas = empresaService.listarEmpresas();
+        for (EmpresaConsultaDto empresa : empresas) {
+            List<FuncionarioConsultaDto> admins = funcionarioService.listarAdminDto(empresa.getId());
+            List<ProdutoConsultaDto> produtos = listarProdutosAlertaEstoque(empresa.getId());
+            StringBuilder msgEstoque = new StringBuilder();
+            for (FuncionarioConsultaDto admin : admins) {
+                for (ProdutoConsultaDto produto : produtos) {
+                    msgEstoque.append("Produto: %s /// Estoque: %d /// Nível de estoque: %s\n"
+                            .formatted(produto.getNome(), produto.getQntdTotalEstoque(), produto.getNivelEstoque()));
+                }
+                String assunto = "Situação do estoque";
+                String msg = """
+                Olá, %s!
+                Segue a situação do estoque da empresa %s
+                
+                %s"""
+                        .formatted(admin.getNome(),empresa.getRazaoSocial(), msgEstoque);
+                emailService.enviarEmailTexto(admin.getEmail(), "Situação de estoque", msg);
+            }
+        }
     }
     /*
      * ESTOQUE ALTO OK
