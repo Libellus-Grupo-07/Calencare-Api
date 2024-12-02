@@ -47,6 +47,7 @@ public class NotificacaoEstoqueService {
         NotificacaoEstoque notificacaoEstoque = notificacaoEstoqueRepository.findById(idNotificacao)
                 .orElseThrow( () -> new RuntimeException("Notificação não encontrada"));
         notificacaoEstoque.setExcluido(1);
+        notificacaoEstoque.setDtExclusao(java.time.LocalDateTime.now());
         notificacaoEstoqueRepository.save(notificacaoEstoque);
     }
 
@@ -54,6 +55,7 @@ public class NotificacaoEstoqueService {
         NotificacaoEstoque notificacaoEstoque = notificacaoEstoqueRepository.findById(idNotificacao)
                 .orElseThrow( () -> new RuntimeException("Notificação não encontrada"));
         notificacaoEstoque.setLido(1);
+        notificacaoEstoque.setDtLeitura(java.time.LocalDateTime.now());
         notificacaoEstoqueRepository.save(notificacaoEstoque);
     }
 
@@ -61,6 +63,7 @@ public class NotificacaoEstoqueService {
         List<NotificacaoEstoque> notificacoes = notificacaoEstoqueRepository.findNotificacoesByEmpresaId(idEmpresa);
         for (NotificacaoEstoque notificacao : notificacoes) {
             notificacao.setLido(1);
+            notificacao.setDtLeitura(java.time.LocalDateTime.now());
         }
         notificacaoEstoqueRepository.saveAll(notificacoes);
     }

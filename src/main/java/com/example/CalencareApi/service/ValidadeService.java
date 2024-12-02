@@ -54,4 +54,9 @@ public class ValidadeService {
         }
         return false;
     }
+
+    public List<ValidadeConsultaDto> buscarPorEmpresaId(Integer idEmpresa) {
+        List<Validade> validades = validadeRepository.findByEmpresaId(idEmpresa);
+        return ValidadeMapper.toDto(validades);
+    }
 }

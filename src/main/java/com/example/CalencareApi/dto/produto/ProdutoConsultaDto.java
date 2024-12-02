@@ -1,7 +1,4 @@
 package com.example.CalencareApi.dto.produto;
-
-import com.example.CalencareApi.entity.CategoriaProduto;
-import com.example.CalencareApi.entity.Empresa;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +11,6 @@ public class ProdutoConsultaDto {
     private Integer categoriaProdutoId;
     private String categoriaProdutoNome;
     private Integer qntdTotalEstoque;
+    private String nivelEstoque;
     private Integer empresaId;
 }

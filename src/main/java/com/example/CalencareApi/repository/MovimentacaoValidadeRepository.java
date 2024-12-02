@@ -28,8 +28,20 @@ public interface MovimentacaoValidadeRepository extends JpaRepository<Movimentac
             "WHERE mv.bitStatus = 1 " +
             "AND mv.tipoMovimentacao = 1" +
             "AND mv.validade.produto.empresa.id = :idEmpresa " +
-            "GROUP BY mv.validade.produto.id")
+            "GROUP BY mv.validade.produto.id " +
+            "ORDER BY UPPER(mv.validade.produto.categoriaProduto.nome), UPPER(mv.validade.produto.nome)")
     List<Map<String,Object>> findAverageByProdutoId(Integer idEmpresa);
+
+
+    // retornar por id de produto
+    @Query("SELECT new map (mv.validade.produto.id AS id_prod,AVG(mv.quantidade) AS qntd) FROM MovimentacaoValidade mv " +
+            "WHERE mv.bitStatus = 1 " +
+            "AND mv.tipoMovimentacao = 1" +
+            "AND mv.validade.produto.empresa.id = :idEmpresa " +
+            "AND mv.validade.produto.id = :idProduto " +
+            "GROUP BY mv.validade.produto.id " +
+            "ORDER BY UPPER(mv.validade.produto.categoriaProduto.nome), UPPER(mv.validade.produto.nome)")
+    List<Map<String,Object>> findAverageByProdutoId(Integer idEmpresa, Integer idProduto);
 
     // retornar quantidade de produtos repostos no dia
     @Query("SELECT COUNT(DISTINCT (mv.validade.produto.id)) FROM MovimentacaoValidade mv " +

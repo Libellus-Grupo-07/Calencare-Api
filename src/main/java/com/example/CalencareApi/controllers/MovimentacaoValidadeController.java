@@ -95,9 +95,9 @@ public class MovimentacaoValidadeController {
         return ResponseEntity.ok(movimentacaoValidadeService.retornarQuantidadeProdutosRepostosDia(idEmpresa, data));
     }
 
-    @GetMapping("/listar-movimentacoes-produto/{idProduto}")
-    public ResponseEntity<List<MovimentacaoValidadeConsultaDto>> listarMovimentacoesProduto(@PathVariable Integer idProduto) {
-        List<MovimentacaoValidadeConsultaDto> movimentacoes = movimentacaoValidadeService.listarMovimentacoesProduto(idProduto);
+    @GetMapping("/listar-movimentacoes-produto/{idEmpresa}")
+    public ResponseEntity<List<MovimentacaoValidadeConsultaDto>> listarMovimentacoesEmpresa(@PathVariable Integer idEmpresa) {
+        List<MovimentacaoValidadeConsultaDto> movimentacoes = movimentacaoValidadeService.listarMovimentacoesEmpresa(idEmpresa);
         if (movimentacoes.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

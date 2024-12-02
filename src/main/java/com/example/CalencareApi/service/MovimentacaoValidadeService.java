@@ -111,6 +111,31 @@ public class MovimentacaoValidadeService {
         }
         ProdutoConsultaDto produtoConsultaDto = ProdutoMapper.toDto(produto);
         produtoConsultaDto.setQntdTotalEstoque(retornarQuantidadeTotalProduto(id));
+        if (produtoConsultaDto.getQntdTotalEstoque() == 0) {
+            produtoConsultaDto.setNivelEstoque("Sem estoque");
+        }
+        List<Map<String,Object>> mediaProdutos = retornarQuantidadeMediaProdutos(idEmpresa);
+
+        for (int i = 0; i < mediaProdutos.size(); i++) {
+            Map<String,Object> mediaProduto = mediaProdutos.get(i);
+            Integer idProduto = (Integer) mediaProduto.get("id_prod");
+            Double media = (Double) mediaProduto.get("qntd");
+            Integer qntdAtual = retornarQuantidadeTotalProduto(idProduto);
+            Double porcentagemRelativa = (qntdAtual * 100) / media;
+            String nivelEstoque = "";
+            if (idProduto == id) {
+                if ( porcentagemRelativa > 15.0 && porcentagemRelativa <= 30.0 ) {
+                    nivelEstoque = "Estoque baixo";
+                } else if (porcentagemRelativa > 0.0 && porcentagemRelativa <= 15.0) {
+                    nivelEstoque = "Quase sem estoque";
+                } else if (qntdAtual == 0) {
+                    nivelEstoque = "Sem estoque";
+                } else {
+                    nivelEstoque = "Estoque alto";
+                }
+                produtoConsultaDto.setNivelEstoque(nivelEstoque);
+            }
+        }
         return produtoConsultaDto;
     }
 
@@ -126,18 +151,76 @@ public class MovimentacaoValidadeService {
 
     public List<ProdutoConsultaDto> buscarPorNomeOuMarca(Integer idEmpresa, String nome) {
         List<ProdutoConsultaDto> produtos = ProdutoMapper.toDto(this.produtoRepository.findByNomeOrMarca(idEmpresa, nome));
-        for (ProdutoConsultaDto produto : produtos) {
-            produto.setQntdTotalEstoque(retornarQuantidadeTotalProduto(produto.getId()));
+        List<ProdutoConsultaDto> produtosCopia = new ArrayList<>();
+        List<ProdutoConsultaDto> produtosSemEstoque = new ArrayList<>();
+        for (int i = 0; i < produtos.size(); i++) {
+            produtosCopia.add(produtos.get(i));
         }
-        return produtos;
+
+        for (int i = 0; i < produtosCopia.size(); i++) {
+            ProdutoConsultaDto produto = produtosCopia.get(i);
+            Integer qntd = retornarQuantidadeTotalProduto(produtosCopia.get(i).getId());
+
+            if (qntd == 0) {
+                produtosCopia.remove(i);
+                produto.setNivelEstoque("Sem estoque");
+                produtosSemEstoque.add(produto);
+                i--;
+            } else {
+                produtosCopia.get(i).setQntdTotalEstoque(qntd);
+            }
+        }
+        return produtosCopia;
     }
+
 
     public List<ProdutoConsultaDto> listarPorEmpresaId(Integer idEmpresa) {
         List<ProdutoConsultaDto> produtos = ProdutoMapper.toDto(this.produtoRepository.findAllByEmpresaId(idEmpresa));
-        for (ProdutoConsultaDto produto : produtos) {
-            produto.setQntdTotalEstoque(retornarQuantidadeTotalProduto(produto.getId()));
+        List<ProdutoConsultaDto> produtosCopia = new ArrayList<>();
+        List<ProdutoConsultaDto> produtosSemEstoque = new ArrayList<>();
+        for (int i = 0; i < produtos.size(); i++) {
+            produtosCopia.add(produtos.get(i));
         }
-        return produtos;
+
+        for (int i = 0; i < produtosCopia.size(); i++) {
+            ProdutoConsultaDto produto = produtosCopia.get(i);
+            Integer qntd = retornarQuantidadeTotalProduto(produtosCopia.get(i).getId());
+
+            if (qntd == 0) {
+                produtosCopia.remove(i);
+                produto.setNivelEstoque("Sem estoque");
+                produtosSemEstoque.add(produto);
+                i--;
+            } else {
+                produtosCopia.get(i).setQntdTotalEstoque(qntd);
+            }
+        }
+
+        List<Map<String,Object>> mediaProdutos = retornarQuantidadeMediaProdutos(idEmpresa);
+
+        for (int i = 0; i < mediaProdutos.size(); i++) {
+            Map<String,Object> mediaProduto = mediaProdutos.get(i);
+            Integer idProduto = (Integer) mediaProduto.get("id_prod");
+            Double media = (Double) mediaProduto.get("qntd");
+            Integer qntdAtual = retornarQuantidadeTotalProduto(idProduto);
+            Double porcentagemRelativa = (qntdAtual * 100) / media;
+            String nivelEstoque = "";
+            if ( porcentagemRelativa > 15.0 && porcentagemRelativa <= 30.0 ) {
+                nivelEstoque = "Estoque baixo";
+            } else if (porcentagemRelativa > 0.0 && porcentagemRelativa <= 15.0) {
+                nivelEstoque = "Quase sem estoque";
+            } else if (qntdAtual == 0) {
+                nivelEstoque = "Sem estoque";
+            } else {
+                nivelEstoque = "Estoque alto";
+            }
+            produtosCopia.get(i).setNivelEstoque(nivelEstoque);
+        }
+
+        produtosCopia.addAll(produtosSemEstoque);
+        produtosCopia.sort((p1, p2) -> p1.getNome() == null ? -1 : p1.getNome().compareTo(p2.getNome()));
+
+        return produtosCopia;
     }
 
     // KPIS
@@ -147,6 +230,10 @@ public class MovimentacaoValidadeService {
 
     public List<Map<String,Object>> retornarQuantidadeMediaProdutos(Integer idEmpresa) {
         return movimentacaoValidadeRepository.findAverageByProdutoId(idEmpresa);
+    }
+
+    public List<Map<String,Object>> retornarQuantidadeMediaProdutos(Integer idEmpresa, Integer idProduto) {
+        return movimentacaoValidadeRepository.findAverageByProdutoId(idEmpresa, idProduto);
     }
 
     public Integer retornarQuantidadeProdutosAlta (Integer idEmpresa) {
@@ -237,7 +324,6 @@ public class MovimentacaoValidadeService {
             Double media = (Double) mediaProduto.get("qntd");
             Integer qntdAtual = retornarQuantidadeTotalProduto(idProduto);
             Double porcentagemRelativa = (qntdAtual * 100) / media;
-            System.out.println("ESTOQUE BAIXO:" + idProduto + " " + porcentagemRelativa);
 
             if (porcentagemRelativa > 15.0 && porcentagemRelativa <= 30.0) {
                 ProdutoConsultaDto produto = buscarProdutoPorId(idProduto);
@@ -245,8 +331,6 @@ public class MovimentacaoValidadeService {
                 produtosBaixo.add(produto);
                 String descricao = "Estoque baixo";
                 notificacaoEstoqueService.cadastrar(produto, descricao);
-                System.out.println(produto.getNome() + " " + porcentagemRelativa);
-
             }
         }
 
@@ -272,12 +356,11 @@ public class MovimentacaoValidadeService {
             Double media = (Double) mediaProduto.get("qntd");
             Integer qntdAtual = retornarQuantidadeTotalProduto(idProduto);
             Double porcentagemRelativa = (qntdAtual * 100) / media;
-            System.out.println("ESTOQUE MUITO BAIXO:" + idProduto + " " + porcentagemRelativa);
 
-            if (porcentagemRelativa <= 15.0) {
+            if (porcentagemRelativa <= 15.0 && porcentagemRelativa > 0) {
                 ProdutoConsultaDto produto = buscarProdutoPorId(idProduto);
                 produtosMuitoBaixo.add(produto);
-                String descricao = "Estoque muito baixo";
+                String descricao = "Quase sem estoque";
                 notificacaoEstoqueService.cadastrar(produto, descricao);
             }
         }
@@ -320,8 +403,8 @@ public class MovimentacaoValidadeService {
     }
 
     // Listar todas as movimentações de um produto
-    public List<MovimentacaoValidadeConsultaDto> listarMovimentacoesProduto(Integer idProduto) {
-        List<Validade> validades = validadeRepository.findByProdutoId(idProduto);
+    public List<MovimentacaoValidadeConsultaDto> listarMovimentacoesEmpresa(Integer idEmpresa) {
+        List<Validade> validades = validadeRepository.findByEmpresaId(idEmpresa);
         List<MovimentacaoValidadeConsultaDto> movimentacoes = new ArrayList<>();
         for (Validade validade : validades) {
             List<MovimentacaoValidade> movimentacaoValidades = movimentacaoValidadeRepository.findByValidadeId(validade.getId());
@@ -331,9 +414,6 @@ public class MovimentacaoValidadeService {
         }
         return movimentacoes;
     }
-
-
-
     /*
      * ESTOQUE ALTO OK
      * SEM ESTOQUE OK
