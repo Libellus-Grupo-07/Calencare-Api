@@ -71,4 +71,17 @@ public class ProdutoController {
         if (produtos.isEmpty()) { return ResponseEntity.status(204).build(); }
         return ResponseEntity.ok(produtos);
     }
+
+    // retornar produtos com estoque em alerta
+    @GetMapping("/alerta-estoque/{idEmpresa}")
+    public ResponseEntity<List<ProdutoConsultaDto>> listarProdutosAlertaEstoque(@PathVariable Integer idEmpresa) {
+        List<ProdutoConsultaDto> produtos = movimentacaoValidadeService.listarProdutosAlertaEstoque(idEmpresa);
+        if (produtos == null) {
+            return ResponseEntity.noContent().build();
+        }
+        if (produtos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(produtos);
+    }
 }
